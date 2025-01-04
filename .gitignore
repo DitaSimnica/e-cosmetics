@@ -133,5 +133,11 @@ dist
 backend/bin/
 backend/obj/
 
+# Visual Studio files
+.vs/
+.vs2019/
+.vs2017/
+.vs2015/
+
 # Additional logs
 *.log
