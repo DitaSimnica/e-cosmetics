@@ -93,8 +93,8 @@ namespace backend.Models
                 response.user = user;
             }
             return response;
-        
-    }
+
+        }
 
         public Response updateProfile(Users users, SqlConnection connection)
         {
@@ -117,6 +117,32 @@ namespace backend.Models
             {
                 response.StatusCode = 100;
                 response.StatusMessage = "Some error occured";
+            }
+            return response;
+        }
+        public Response addToCart(Cart cart, SqlConnection connection)
+        {
+            Response response = new Response();
+            SqlCommand cmd = new SqlCommand("sp_AddToCart", connection);
+            cmd.CommandType= CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@UserId", cart.UserId);
+            cmd.Parameters.AddWithValue("@CosmeticProductID", cart.CosmeticProductID);
+            cmd.Parameters.AddWithValue("@UnitPrice", cart.UnitPrice);
+            cmd.Parameters.AddWithValue("@Discount", cart.Discount);
+            cmd.Parameters.AddWithValue("@Quantity", cart.Quantity);
+            cmd.Parameters.AddWithValue("@TotalPrice", cart.TotalPrice);
+            connection.Open();
+            int i = cmd.ExecuteNonQuery();  
+            connection.Close();
+            if (i > 0)
+            {
+                response.StatusCode = 200;
+                response.StatusMessage = "Item added successfully";
+            }
+            else
+            {
+                response.StatusCode = 100;
+                response.StatusMessage = "item could not be added";
             }
             return response;
         }

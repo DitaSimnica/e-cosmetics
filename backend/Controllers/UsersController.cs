@@ -57,5 +57,6 @@ namespace backend.Controllers
             Response response = dal.updateProfile(users, connection);
             return response;
         }
+
     }
 }
