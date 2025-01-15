@@ -120,6 +120,7 @@ namespace backend.Models
             }
             return response;
         }
+
         public Response addToCart(Cart cart, SqlConnection connection)
         {
             Response response = new Response();
