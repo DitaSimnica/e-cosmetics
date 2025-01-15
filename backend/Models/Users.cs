@@ -11,5 +11,6 @@
         public string Type { get; set; }
         public int Status { get; set; }
         public DateTime CreatedOn { get; set; }
+
     }
 }

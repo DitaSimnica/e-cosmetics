@@ -170,5 +170,47 @@ namespace backend.Models
 
             return response;
         }
+
+        public Response orderList(Users users, SqlConnection connection)
+        {
+            Response response = new Response();
+            List<Orders> listOrder = new List<Orders>();
+            SqlDataAdapter da = new SqlDataAdapter("sp_OrderList", connection);
+            da.SelectCommand.CommandType = CommandType.StoredProcedure;
+            da.SelectCommand.Parameters.AddWithValue("@Type", users.Type);
+            da.SelectCommand.Parameters.AddWithValue("@ID", users.ID);
+            DataTable dt = new DataTable();
+            da.Fill(dt);
+            if (dt.Rows.Count > 0)
+            {
+                for (int i = 0; i < dt.Rows.Count; i++)
+                {
+                    Orders order = new Orders();
+                    order.ID = Convert.ToInt32(dt.Rows[i]["ID"]);
+                    order.OrderNo = Convert.ToString(dt.Rows[i]["OrderNo"]);
+                    order.OrderTotal = Convert.ToDecimal(dt.Rows[i]["OrderTotal"]);
+                    order.OrderStatus = Convert.ToString(dt.Rows[i]["OrderStatus"]);
+                    listOrder.Add(order);
+                }
+                if (listOrder.Count > 0)
+                { 
+                response.StatusCode = 200;
+                response.StatusMessage = "Order details fetched";
+                response.listOrders = listOrder;
+            }
+            else
+            {
+                response.StatusCode = 100;
+                response.StatusMessage = "Order details are not available";
+                response.listOrders = null;
+            }
+        }
+            else{
+                response.StatusCode = 100;
+                response.StatusMessage = "Order details are not available";
+                response.listOrders = null;
+            }
+            return response;
+        }
     }
 }
