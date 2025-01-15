@@ -147,5 +147,28 @@ namespace backend.Models
             }
             return response;
         }
+
+        public Response placeOrder(Users users, SqlConnection connection)
+        {
+            Response response = new Response();
+            SqlCommand cmd = new SqlCommand("sp_PlaceOrder", connection);
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@ID", users.ID);
+            connection.Open();
+            int i = cmd.ExecuteNonQuery();
+            connection.Close();
+            if (i > 0)
+            {
+                response.StatusCode = 200;
+                response.StatusMessage = "Order has been placed successfully";
+            }
+            else
+            {
+                response.StatusCode = 100;
+                response.StatusMessage = "Order could not be placed";
+            }
+
+            return response;
+        }
     }
 }
