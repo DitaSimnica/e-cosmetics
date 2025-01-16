@@ -9,10 +9,10 @@ namespace backend.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CosmeticsController : ControllerBase
+    public class CosmeticProductsController : ControllerBase
     {
         private readonly IConfiguration _configuration;
-        public CosmeticsController(IConfiguration configuration)
+        public CosmeticProductsController(IConfiguration configuration)
         {
             _configuration = configuration;
         }
@@ -30,9 +30,19 @@ namespace backend.Controllers
         public Response placeOrder(Users users)
         {
             DAL dal = new DAL();
-            SqlConnection connection = new SqlConnection(_configuration.GetConnectionString("ECosmetics").toString());
+            SqlConnection connection = new SqlConnection(_configuration.GetConnectionString("ECosmetics").ToString());
             Response response = dal.placeOrder(users, connection);
             return response;
         }
+        [HttpPost]
+        [Route("orderList")]
+        public Response orderList(Users users)
+        {
+            DAL dal = new DAL();
+            SqlConnection connection = new SqlConnection(_configuration.GetConnectionString("ECosmetics").ToString());
+            Response response = dal.orderList(users, connection);
+            return response;
+        }
+
     }
 }

@@ -212,5 +212,35 @@ namespace backend.Models
             }
             return response;
         }
+
+        public Response addUpdateCosmeticProducts(CosmeticProducts cosmeticProducts, SqlConnection connection)
+        {
+            Response response = new Response();
+            SqlCommand cmd = new SqlCommand("sp_AddUpdateCosmeticProducts", connection);
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@Name", cosmeticProducts.Name);
+            cmd.Parameters.AddWithValue("@Brand", cosmeticProducts.Brand);
+            cmd.Parameters.AddWithValue("@UnitPrice", cosmeticProducts.UnitPrice);
+            cmd.Parameters.AddWithValue("@Discount", cosmeticProducts.Discount);
+            cmd.Parameters.AddWithValue("@Quantity", cosmeticProducts.Quantity);
+            cmd.Parameters.AddWithValue("@ImageUrl", cosmeticProducts.ImageUrl);
+            cmd.Parameters.AddWithValue("@Status", cosmeticProducts.Status);
+            cmd.Parameters.AddWithValue("@Type", cosmeticProducts.Type);
+
+            connection.Open();
+            int i = cmd.ExecuteNonQuery();
+            connection.Close();
+            if (i > 0)
+            {
+                response.StatusCode = 200;
+                response.StatusMessage = "Cosmetic product inserted successfully";
+            }
+            else
+            {
+                response.StatusCode = 100;
+                response.StatusMessage = "Cosmetic product did not save";
+            }
+            return response;
+        }
     }
 }
