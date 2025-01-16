@@ -25,5 +25,16 @@ namespace backend.Controllers
             Response response = dal.addUpdateCosmeticProducts(cosmeticProducts, connection);
             return response;
         }
+
+        [HttpGet]
+        [Route("userList")]
+        public Response userList()
+        {
+            DAL dal = new DAL();
+            SqlConnection connection = new SqlConnection(_configuration.GetConnectionString("ECosmetics").ToString());
+            Response response = dal.userList(connection);
+            return response;
+        
+        }
     }
 }
