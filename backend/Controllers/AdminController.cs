@@ -17,7 +17,7 @@ namespace backend.Controllers
         }
         [HttpPost]
         [Route("addUpdateCosmeticProducts")]
-        public Response addUpdateCosmeticProducts(CosmeticProducts cosmeticProducts)
+        public Response addUpdateCosmeticProducts(CosmeticProduct cosmeticProducts)
         {
             DAL dal = new DAL();
             SqlConnection connection = new SqlConnection(_configuration.GetConnectionString("ECosmetics").ToString());
