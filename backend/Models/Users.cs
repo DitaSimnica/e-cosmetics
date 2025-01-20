@@ -9,10 +9,10 @@ namespace backend.Models
         public string FirstName { get; set; }
         [Required]
         public string LastName { get; set; }
-        [Required]
-        public string Password { get; set; }
         [Required, EmailAddress]
         public string Email { get; set; }
+        [Required]
+        public string Password { get; set; } // Hashed password
         public decimal Fund { get; set; }
         public string Type { get; set; } //Admin, Customer etc
         public int Status { get; set; }
