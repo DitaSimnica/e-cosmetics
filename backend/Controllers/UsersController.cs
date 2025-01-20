@@ -1,7 +1,8 @@
-﻿using backend.Models;
+﻿using backend.Data;
+using backend.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 
 namespace backend.Controllers
 {
@@ -9,54 +10,56 @@ namespace backend.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
-        private readonly IConfiguration _configuration;
-        public UsersController(IConfiguration configuration)
+        private readonly ApplicationDbContext _context;
+
+        public UsersController(ApplicationDbContext context)
         {
-            _configuration = configuration;
+            _context = context;
         }
-
-        [HttpPost]
-        [Route("registration")]
-        public Response register(Users users)
+        [HttpGet]
+        public async Task<ActionResult<Users>> GetUser(int id)
         {
-            Response response = new Response();
-            DAL dal = new DAL();
-            SqlConnection connection = new SqlConnection(_configuration.GetConnectionString("ECosmetics").ToString());
-            response = dal.register(users, connection);
-            return response;
+            var user = await _context.Users.FindAsync(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+            return user;
         }
-
         [HttpPost]
-        [Route("login")]
-        public Response login(Users users) { 
-            
-            DAL dal = new DAL();
-            SqlConnection connection = new SqlConnection(_configuration.GetConnectionString("ECosmetics").ToString());
-   
-            Response response= dal.login(users, connection);
-            return response;
-
-        }
-
-        [HttpPost]
-        [Route("viewUser")]
-        public Response viewUser(Users users)
+        public async Task<ActionResult<Users>> PostUser(Users user)
         {
-            DAL dal = new DAL();
-            SqlConnection connection = new SqlConnection(_configuration.GetConnectionString("ECosmetics").ToString());
-            Response response = dal.viewUser(users, connection);
-            return response;
-        }
+            _context.Users.Add(user);
+            await _context.SaveChangesAsync();
 
-        [HttpPost]
-        [Route("updateProfile")]
-        public Response updateProfile(Users users)
+            return CreatedAtAction("GetUser", new { id = user.Id }, user);
+        }
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutUser(int id, Users user)
         {
-            DAL dal = new DAL();
-            SqlConnection connection = new SqlConnection(_configuration.GetConnectionString("ECosmetics").ToString());
-            Response response = dal.updateProfile(users, connection);
-            return response;
-        }
+            if (id != user.Id)
+            {
+                return BadRequest();
+            }
 
+            _context.Entry(user).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteUser(int id)
+        {
+            var user = await _context.Users.FindAsync(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            _context.Users.Remove(user);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
     }
 }
