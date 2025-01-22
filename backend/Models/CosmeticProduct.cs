@@ -9,8 +9,10 @@
         public decimal Discount { get; set; }
         public int Quantity { get; set; }
         public string ImageUrl { get; set; }
-        public int Status { get; set; }
-        public string Type { get; set; }
+        public string Status { get; set; } // "Active", "Inactive", etc.
+        public string Type { get; set; } // Optional: Specific product type
+        public string Category { get; set; } // Add for better organization
+        public string Tags { get; set; } // Comma-separated tags (e.g., "skincare,organic")
 
         // No need for a navigation property here unless required:
         // If you need to access all OrderItems for a specific product, then add the following:

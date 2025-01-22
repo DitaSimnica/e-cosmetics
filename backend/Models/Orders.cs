@@ -9,6 +9,8 @@ namespace backend.Models
         public string OrderNo { get; set; }
         public decimal OrderTotal { get; set; }
         public string OrderStatus { get; set; }
+        public DateTime CreatedOn { get; set; } // Timestamp for order creation
+        public DateTime UpdatedOn { get; set; } // Timestamp for last update
 
         // Navigation property to Users
         [ForeignKey("UserId")]
