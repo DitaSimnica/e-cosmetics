@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using backend.Models.Enums;
 
 namespace backend.Models
 {
@@ -14,8 +15,8 @@ namespace backend.Models
         [Required]
         public string Password { get; set; } // Hashed password
         public decimal Fund { get; set; }
-        public string Type { get; set; } //Admin, Customer etc
-        public int Status { get; set; }
+        public UserType UserType { get; set; } // Enum for role
+        public bool IsActive { get; set; } // Replaces Status
         public DateTime CreatedOn { get; set; }
 
         // Navigation property for orders (one-to-many relationship)
