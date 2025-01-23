@@ -5,7 +5,6 @@ using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using backend.Helpers;
-//using backend.Helpers;
 //using backend.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -33,13 +32,13 @@ builder.Services.AddAuthentication(options =>
         ValidateAudience = true,
         ValidateLifetime = true,
         ValidateIssuerSigningKey = true,
-        ValidIssuer = "your-issuer",
-        ValidAudience = "your-audience",
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("your-secret-key"))
+        ValidIssuer = "https://localhost:7078",
+        ValidAudience = "https://localhost:7078",
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("your-very-secure-and-long-secret-key-12345"))
     };
 });
 
-builder.Services.AddSingleton(new JwtHelper("your-secret-key"));
+builder.Services.AddSingleton(new JwtHelper("your-very-secure-and-long-secret-key-12345"));
 
 
 var app = builder.Build();
@@ -53,6 +52,8 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.MapControllers();
+app.UseAuthentication(); //to enable JWT authentication
+app.UseAuthorization(); //to enable authorization
 
 var summaries = new[]
 {
