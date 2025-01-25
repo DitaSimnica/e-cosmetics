@@ -18,14 +18,18 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+// Bind JwtSettings from appsettings.json
+builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
 
-//JWT configuration
+// JWT configuration
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
 }).AddJwtBearer(options =>
 {
+    var secretKey = builder.Configuration.GetValue<string>("JwtSettings:SecretKey");
+
     options.TokenValidationParameters = new TokenValidationParameters
     {
         ValidateIssuer = true,
@@ -34,12 +38,9 @@ builder.Services.AddAuthentication(options =>
         ValidateIssuerSigningKey = true,
         ValidIssuer = "https://localhost:7078",
         ValidAudience = "https://localhost:7078",
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("your-very-secure-and-long-secret-key-12345"))
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey))
     };
 });
-
-builder.Services.AddSingleton(new JwtHelper("your-very-secure-and-long-secret-key-12345"));
-
 
 var app = builder.Build();
 
