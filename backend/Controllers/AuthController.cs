@@ -1,6 +1,7 @@
 ﻿using backend.Data;
 using backend.Helpers;
 using backend.Models;
+using backend.Models.Enums;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -26,29 +27,36 @@ namespace backend.Controllers
         }
 
         [HttpPost("register")]
-        public IActionResult Register([FromBody] Register model)
+        public async Task<IActionResult> Register([FromBody] Register model)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            // Check if email already exists
-            if (_context.Users.Any(u => u.Email == model.Email))
-                return BadRequest("Email already in use.");
+            // Validate UserType
+            if (!Enum.TryParse<UserType>(model.UserType, out var userType))
+                return BadRequest("Invalid user type. Must be 'Admin' or 'Customer'.");
 
-            // Create a new user instance
+            // Check if email already exists
+            var existingUser = _context.Users.FirstOrDefault(u => u.Email == model.Email);
+            if (existingUser != null)
+                return BadRequest("Email is already registered.");
+
+            // Create new user
             var user = new Users
             {
                 FirstName = model.FirstName,
                 LastName = model.LastName,
                 Email = model.Email,
-                Password = BCrypt.Net.BCrypt.HashPassword(model.Password)
+                Password = BCrypt.Net.BCrypt.HashPassword(model.Password), // Using BCrypt to hash the password
+                UserType = userType, // Assign UserType
+                IsActive = true,
+                CreatedOn = DateTime.UtcNow
             };
 
-            // Save user to the database
             _context.Users.Add(user);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
-            return Ok("User registered successfully.");
+            return Ok("User  registered successfully.");
         }
 
         [HttpPost("login")]
@@ -75,14 +83,15 @@ namespace backend.Controllers
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                 new Claim(ClaimTypes.Name, user.FirstName + " " + user.LastName),
                 new Claim(ClaimTypes.Email, user.Email),
+                new Claim(ClaimTypes.Role, user.UserType.ToString()) // Add UserType as a claim
         };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.SecretKey));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
             var token = new JwtSecurityToken(
-                issuer: "YourIssuer",
-                audience: "YourAudience",
+                issuer: "https://localhost:7078",
+                audience: "https://localhost:7078",
                 claims: claims,
                 expires: DateTime.Now.AddHours(1),
                 signingCredentials: creds);

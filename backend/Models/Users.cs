@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using backend.Models.Enums;
 
 namespace backend.Models
@@ -15,7 +16,9 @@ namespace backend.Models
         [Required]
         public string Password { get; set; } // Hashed password
         public decimal Fund { get; set; }
-        public UserType UserType { get; set; } // Enum for role
+
+        [Column(TypeName = "varchar(20)")] // Specify the length as needed
+        public UserType UserType { get; set; }
         public bool IsActive { get; set; } // Replaces Status
         public DateTime CreatedOn { get; set; }
 

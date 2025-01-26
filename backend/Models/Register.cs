@@ -17,5 +17,7 @@ namespace backend.Models
         [Required]
         [MinLength(6)]
         public string Password { get; set; }
+        [Required]
+        public string UserType { get; set; } // To accept "Admin" or "Customer"
     }
 }
