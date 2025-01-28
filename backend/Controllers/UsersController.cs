@@ -2,12 +2,14 @@
 using Microsoft.EntityFrameworkCore;
 using backend.Models;
 using backend.Data;
+using Microsoft.AspNetCore.Authorization;
 
 
 namespace YourProject.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class UsersController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
@@ -39,7 +41,7 @@ namespace YourProject.Controllers
 
         // PUT: api/users/{id}
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateUser(int id, [FromBody] User updatedUser)
+        public async Task<IActionResult> UpdateUser(int id, [FromBody] Users updatedUser)
         {
             if (id != updatedUser.Id)
             {
