@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 using backend.Models.Enums;
 
 namespace backend.Models
@@ -23,9 +24,11 @@ namespace backend.Models
         public DateTime CreatedOn { get; set; }
 
         // Navigation property for orders (one-to-many relationship)
+        [JsonIgnore]
         public ICollection<Orders> Orders { get; set; }
 
         // Navigation property for cart (one-to-many relationship)
+        [JsonIgnore]
         public ICollection<Cart> Carts { get; set; }
     }
 }

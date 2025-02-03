@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace backend.Models
 {
@@ -15,7 +16,9 @@ namespace backend.Models
         public decimal TotalPrice { get; set; }
 
         // Navigation Properties
+        [JsonIgnore]
         public Users User { get; set; } // Reference to Users
+        [JsonIgnore]
         public CosmeticProduct CosmeticProduct { get; set; } // Reference to CosmeticProduct
     }
 }

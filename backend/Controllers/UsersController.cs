@@ -1,15 +1,16 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+﻿using backend.Data;
 using backend.Models;
-using backend.Data;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
+using System.Text;
+using System.Security.Cryptography;
 
-
-namespace YourProject.Controllers
+namespace backend.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
     public class UsersController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
@@ -19,64 +20,60 @@ namespace YourProject.Controllers
             _context = context;
         }
 
-        // GET: api/users
+        // GET: api/Users (Admins only)
         [HttpGet]
-        public async Task<IActionResult> GetAllUsers()
+        [Authorize(Roles = "Admin")]
+        public async Task<ActionResult<IEnumerable<Users>>> GetUsers()
         {
-            var users = await _context.Users.ToListAsync();
-            return Ok(users);
+            return await _context.Users.ToListAsync();
         }
-        // GET: api/users/{id}
+
+        // GET: api/Users/{id} (Admins only)
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetUser(int id)
+        [Authorize(Roles = "Admin")]
+        public async Task<ActionResult<Users>> GetUser(int id)
         {
             var user = await _context.Users.FindAsync(id);
-            if (user == null)
-            {
-                return NotFound();
-            }
+            if (user == null) return NotFound();
 
-            return Ok(user);
+            return user;
         }
 
-        // PUT: api/users/{id}
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateUser(int id, [FromBody] Users updatedUser)
+        // PUT: api/Users/update (Customers can only update their own password)
+        [HttpPut("update")]
+        [Authorize(Roles = "Customer")]
+        public async Task<IActionResult> UpdateUser([FromBody] Users updatedUser)
         {
-            if (id != updatedUser.Id)
+            var userId = GetUserIdFromToken();
+            if (userId == null) return Unauthorized(new { message = "Invalid token." });
+
+            var user = await _context.Users.FindAsync(userId);
+            if (user == null) return NotFound();
+
+            // Only update the password if provided
+            if (!string.IsNullOrEmpty(updatedUser.Password))
             {
-                return BadRequest();
+                // Hash the password before saving
+                user.Password = HashPassword(updatedUser.Password);
+            }
+            else
+            {
+                return BadRequest(new { message = "Password cannot be empty." });
             }
 
-            _context.Entry(updatedUser).State = EntityState.Modified;
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!UserExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            _context.Users.Update(user);
+            await _context.SaveChangesAsync();
 
-            return NoContent();
+            return NoContent(); // Return no content after updating
         }
 
-        // DELETE: api/users/{id}
+        // DELETE: api/Users/{id} (Admins only)
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteUser(int id)
         {
             var user = await _context.Users.FindAsync(id);
-            if (user == null)
-            {
-                return NotFound();
-            }
+            if (user == null) return NotFound();
 
             _context.Users.Remove(user);
             await _context.SaveChangesAsync();
@@ -84,9 +81,19 @@ namespace YourProject.Controllers
             return NoContent();
         }
 
-        private bool UserExists(int id)
+        private int? GetUserIdFromToken()
         {
-            return _context.Users.Any(e => e.Id == id);
+            var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            return userIdClaim != null ? int.Parse(userIdClaim) : (int?)null;
+        }
+
+        private string HashPassword(string password)
+        {
+            using (var sha256 = SHA256.Create())
+            {
+                byte[] bytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(password));
+                return Convert.ToBase64String(bytes);
+            }
         }
     }
 }

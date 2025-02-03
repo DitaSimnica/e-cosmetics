@@ -13,9 +13,5 @@
         public string Type { get; set; } // Optional: Specific product type
         public string Category { get; set; } // Add for better organization
         public string Tags { get; set; } // Comma-separated tags (e.g., "skincare,organic")
-
-        // No need for a navigation property here unless required:
-        // If you need to access all OrderItems for a specific product, then add the following:
-        // public ICollection<OrderItems> OrderItems { get; set; } 
     }
 }

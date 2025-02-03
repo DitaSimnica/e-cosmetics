@@ -1,14 +1,16 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+﻿using backend.Data;
 using backend.Models;
-using backend.Data;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace backend.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize] // Require authentication for all endpoints
     public class CosmeticProductsController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
@@ -18,87 +20,100 @@ namespace backend.Controllers
             _context = context;
         }
 
-        // GET: api/cosmeticproducts
+        // GET: api/CosmeticProducts (For customers and admins)
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<ActionResult<IEnumerable<CosmeticProduct>>> GetCosmeticProducts()
         {
-            var products = await _context.CosmeticProducts.ToListAsync();
-            return Ok(products);
+            return await _context.CosmeticProducts.ToListAsync();
         }
 
-        // GET: api/cosmeticproducts/{id}
+        // GET: api/CosmeticProducts/{id} (For customers and admins)
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetById(int id)
+        public async Task<ActionResult<CosmeticProduct>> GetCosmeticProduct(int id)
         {
-            var product = await _context.CosmeticProducts.FindAsync(id);
-            if (product == null)
+            var cosmeticProduct = await _context.CosmeticProducts.FindAsync(id);
+
+            if (cosmeticProduct == null)
             {
                 return NotFound();
             }
-            return Ok(product);
+
+            return cosmeticProduct;
         }
-        // POST: api/cosmeticproducts
+
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] CosmeticProduct product)
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> PostCosmeticProduct([FromBody] CosmeticProduct cosmeticProduct)
         {
-            if (product == null)
+            if (cosmeticProduct == null)
             {
-                return BadRequest();
+                return BadRequest("Invalid product data.");
             }
 
-            _context.CosmeticProducts.Add(product);
+            // Ensure ID is not being set manually
+            cosmeticProduct.Id = 0;  // This ensures no value is inserted into the ID field
+
+            _context.CosmeticProducts.Add(cosmeticProduct);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetById), new { id = product.Id }, product);
+            // Return success message after successful creation
+            return CreatedAtAction(nameof(GetCosmeticProduct), new { id = cosmeticProduct.Id }, new { message = "Cosmetic product created successfully!" });
         }
 
-        // PUT: api/cosmeticproducts/{id}
+
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, [FromBody] CosmeticProduct updatedProduct)
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> PutCosmeticProduct(int id, [FromBody] CosmeticProduct cosmeticProduct)
         {
-            if (id != updatedProduct.Id)
+            if (cosmeticProduct == null || id != cosmeticProduct.Id)
             {
-                return BadRequest();
+                return BadRequest("Product data is invalid.");
             }
 
-            _context.Entry(updatedProduct).State = EntityState.Modified;
-
-            try
+            var existingProduct = await _context.CosmeticProducts.FindAsync(id);
+            if (existingProduct == null)
             {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!ProductExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                return NotFound(new { message = "Cosmetic product not found." });
             }
 
-            return NoContent();
-        }
+            // Update the product fields
+            existingProduct.Name = cosmeticProduct.Name;
+            existingProduct.Brand = cosmeticProduct.Brand;
+            existingProduct.UnitPrice = cosmeticProduct.UnitPrice;
+            existingProduct.Discount = cosmeticProduct.Discount;
+            existingProduct.Quantity = cosmeticProduct.Quantity;
+            existingProduct.ImageUrl = cosmeticProduct.ImageUrl;
+            existingProduct.Status = cosmeticProduct.Status;
+            existingProduct.Type = cosmeticProduct.Type;
+            existingProduct.Category = cosmeticProduct.Category;
+            existingProduct.Tags = cosmeticProduct.Tags;
 
-        // DELETE: api/cosmeticproducts/{id}
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
-        {
-            var product = await _context.CosmeticProducts.FindAsync(id);
-            if (product == null)
-            {
-                return NotFound();
-            }
-
-            _context.CosmeticProducts.Remove(product);
             await _context.SaveChangesAsync();
 
-            return NoContent();
+            // Return success message after successful update
+            return Ok(new { message = "Cosmetic product updated successfully!" });
         }
 
-        private bool ProductExists(int id)
+
+        // DELETE: api/CosmeticProducts/{id} (Admins only)
+        [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> DeleteCosmeticProduct(int id)
+        {
+            var cosmeticProduct = await _context.CosmeticProducts.FindAsync(id);
+            if (cosmeticProduct == null)
+            {
+                return NotFound(new { message = "Cosmetic product not found." });
+            }
+
+            _context.CosmeticProducts.Remove(cosmeticProduct);
+            await _context.SaveChangesAsync();
+
+            return Ok(new { message = "Cosmetic product deleted successfully!" });
+        }
+
+
+        private bool CosmeticProductExists(int id)
         {
             return _context.CosmeticProducts.Any(e => e.Id == id);
         }

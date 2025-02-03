@@ -1,146 +1,146 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+﻿using backend.Data;
 using backend.Models;
-using backend.Data;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace backend.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize] // Require authentication for all endpoints
     public class CartController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
-        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public CartController(ApplicationDbContext context, IHttpContextAccessor httpContextAccessor)
+        public CartController(ApplicationDbContext context)
         {
             _context = context;
-            _httpContextAccessor = httpContextAccessor;
         }
 
-        private int GetUserIdFromJwt()
-        {
-            var token = _httpContextAccessor.HttpContext.Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
-            var handler = new JwtSecurityTokenHandler();
-            var jsonToken = handler.ReadToken(token) as JwtSecurityToken;
-            var userId = jsonToken?.Claims.FirstOrDefault(c => c.Type == "id")?.Value;
-            return int.Parse(userId);
-        }
-
-        // GET: api/cart
+        // READ: Get all products in the user's cart
         [HttpGet]
-        public async Task<IActionResult> GetCart()
+        [Authorize]  // Ensure that only logged-in users can view their cart
+        public async Task<IActionResult> GetCartItems([FromQuery] int userId)
         {
-            var userId = GetUserIdFromJwt();
             var cartItems = await _context.Carts
                 .Where(c => c.UserId == userId)
                 .Include(c => c.CosmeticProduct)
                 .ToListAsync();
 
+            if (cartItems == null || cartItems.Count == 0)
+            {
+                return NotFound("No items found in the cart.");
+            }
+
             return Ok(cartItems);
         }
 
-        // GET: api/cart/{id}
+        // Add this method to your CartController
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetCartItemById(int id)
+        public async Task<IActionResult> GetCart(int id)
         {
-            var userId = GetUserIdFromJwt();
-            var cartItem = await _context.Carts
-                .Where(c => c.UserId == userId && c.Id == id)
-                .Include(c => c.CosmeticProduct)
-                .FirstOrDefaultAsync();
+            var cart = await _context.Carts
+                                     .Include(c => c.User)
+                                     .Include(c => c.CosmeticProduct)
+                                     .FirstOrDefaultAsync(c => c.Id == id);
 
-            if (cartItem == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(cartItem);
-        }
-
-        // POST: api/cart
-        [HttpPost]
-        public async Task<IActionResult> AddToCart([FromBody] Cart cart)
-        {
             if (cart == null)
             {
-                return BadRequest();
+                return NotFound("Cart not found");
             }
 
-            var userId = GetUserIdFromJwt();
-            cart.UserId = userId;
-
-            // Check if the item already exists in the cart
-            var existingCartItem = await _context.Carts
-                .FirstOrDefaultAsync(c => c.UserId == userId && c.CosmeticProductId == cart.CosmeticProductId);
-
-            if (existingCartItem != null)
-            {
-                // Optionally, update quantity and total price if item exists
-                existingCartItem.Quantity += cart.Quantity;
-                existingCartItem.TotalPrice = existingCartItem.Quantity * existingCartItem.UnitPrice * (1 - existingCartItem.Discount);
-                _context.Entry(existingCartItem).State = EntityState.Modified;
-            }
-            else
-            {
-                cart.TotalPrice = cart.Quantity * cart.UnitPrice * (1 - cart.Discount);
-                _context.Carts.Add(cart);
-            }
-
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction(nameof(GetCartItemById), new { id = cart.Id }, cart);
+            return Ok(cart);
         }
 
-        // PUT: api/cart/{id}
+        [HttpPost]
+        public async Task<ActionResult<Cart>> CreateCart(Cart cart)
+        {
+            // Retrieve the User and CosmeticProduct based on the userId and cosmeticProductId
+            var user = await _context.Users.FindAsync(cart.UserId);
+            var cosmeticProduct = await _context.CosmeticProducts.FindAsync(cart.CosmeticProductId);
+
+            // Check if the User and CosmeticProduct exist in the database
+            if (user == null)
+            {
+                return NotFound("User not found.");
+            }
+            if (cosmeticProduct == null)
+            {
+                return NotFound("Cosmetic product not found.");
+            }
+
+            // Set the User and CosmeticProduct in the cart
+            cart.User = user;
+            cart.CosmeticProduct = cosmeticProduct;
+
+            // Calculate the total price
+            cart.TotalPrice = (cart.UnitPrice - cart.Discount) * cart.Quantity;
+
+            // Save the Cart to the database
+            _context.Carts.Add(cart);
+            await _context.SaveChangesAsync();
+
+            // Return a successful response with the created Cart object
+            return CreatedAtAction("GetCart", new { id = cart.Id }, cart);
+        }
+
+
+        // UPDATE: Update product details in the cart (quantity, price, etc.)
         [HttpPut("{id}")]
+        [Authorize]  // Ensure that only logged-in users can update their cart
         public async Task<IActionResult> UpdateCartItem(int id, [FromBody] Cart updatedCartItem)
         {
-            if (id != updatedCartItem.Id)
+            var cartItem = await _context.Carts.FindAsync(id);
+            if (cartItem == null)
             {
-                return BadRequest();
+                return NotFound("Item not found in the cart.");
             }
 
-            var userId = GetUserIdFromJwt();
-            var existingCartItem = await _context.Carts
-                .FirstOrDefaultAsync(c => c.UserId == userId && c.Id == id);
+            // Update the properties of the cart item
+            cartItem.Quantity = updatedCartItem.Quantity;
+            cartItem.UnitPrice = updatedCartItem.UnitPrice;
+            cartItem.Discount = updatedCartItem.Discount;
+            cartItem.TotalPrice = cartItem.UnitPrice * cartItem.Quantity * (1 - cartItem.Discount / 100);
 
-            if (existingCartItem == null)
-            {
-                return NotFound();
-            }
-
-            existingCartItem.Quantity = updatedCartItem.Quantity;
-            existingCartItem.TotalPrice = existingCartItem.Quantity * existingCartItem.UnitPrice * (1 - existingCartItem.Discount);
-
-            _context.Entry(existingCartItem).State = EntityState.Modified;
+            _context.Carts.Update(cartItem);
             await _context.SaveChangesAsync();
-
-            return NoContent();
+            return Ok("Cart item updated successfully.");
         }
 
-        // DELETE: api/cart/{id}
+        // DELETE: Remove a product from the cart
         [HttpDelete("{id}")]
+        [Authorize]  // Ensure that only logged-in users can remove items from their cart
         public async Task<IActionResult> RemoveFromCart(int id)
         {
-            var userId = GetUserIdFromJwt();
-            var cartItem = await _context.Carts
-                .FirstOrDefaultAsync(c => c.UserId == userId && c.Id == id);
+            var cartItem = await _context.Carts.FindAsync(id);
 
             if (cartItem == null)
             {
-                return NotFound();
+                return NotFound("Item not found in the cart.");
             }
 
             _context.Carts.Remove(cartItem);
             await _context.SaveChangesAsync();
+            return Ok("Product removed from the cart.");
+        }
 
-            return NoContent();
+        // DELETE: Remove all products from the user's cart
+        [HttpDelete("clear/{userId}")]
+        [Authorize]  // Ensure that only logged-in users can clear their cart
+        public async Task<IActionResult> ClearCart(int userId)
+        {
+            var cartItems = await _context.Carts
+                .Where(c => c.UserId == userId)
+                .ToListAsync();
+
+            if (cartItems.Count == 0)
+            {
+                return NotFound("No items found in the cart.");
+            }
+
+            _context.Carts.RemoveRange(cartItems);
+            await _context.SaveChangesAsync();
+            return Ok("All products removed from the cart.");
         }
     }
 }
