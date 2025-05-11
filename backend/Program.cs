@@ -1,89 +1,82 @@
-using Microsoft.EntityFrameworkCore;
-using backend.Data;
-using Microsoft.Extensions.Configuration;
-using System.Text;
-using Microsoft.IdentityModel.Tokens;
+using backend.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using backend.Helpers;
-using Microsoft.OpenApi.Models;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// Add services to the container
 builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
 
-// Database configuration
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
+// Add DbContext
+builder.Services.AddDbContext<DataContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// JWT configuration
-builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
-builder.Services.AddAuthentication(options =>
-{
-    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-}).AddJwtBearer(options =>
-{
-    var secretKey = builder.Configuration.GetValue<string>("JwtSettings:SecretKey");
+// Add AuthService
+builder.Services.AddScoped<IAuthService, AuthService>();
 
-    options.TokenValidationParameters = new TokenValidationParameters
+// Configure JWT Authentication
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
     {
-        ValidateIssuer = true,
-        ValidateAudience = true,
-        ValidateLifetime = true,
-        ValidateIssuerSigningKey = true,
-        ValidIssuer = "https://localhost:7078",
-        ValidAudience = "https://localhost:7078",
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey))
-    };
-});
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(
+                Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"])),
 
-// Swagger with JWT Authentication
-builder.Services.AddSwaggerGen(c =>
-{
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "e-cosmetics", Version = "v1" });
-
-    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-    {
-        Description = "JWT Authorization header using the Bearer scheme. Example: \"Bearer {token}\"",
-        Name = "Authorization",
-        In = ParameterLocation.Header,
-        Type = SecuritySchemeType.ApiKey
+            ValidateIssuer = false,
+            ValidateAudience = false
+        };
     });
 
-    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+builder.Services.AddAuthorization();
+
+// Add CORS configuration
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowSpecificOrigins", policy =>
+    {
+        policy.WithOrigins("http://localhost:3000") // Allow only React frontend (you can adjust the URL)
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
+
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen(c =>
+{
+    // This is to include the Bearer token in Swagger
+    c.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+    {
+        Name = "Authorization",
+        Type = Microsoft.OpenApi.Models.SecuritySchemeType.ApiKey,
+        Scheme = "Bearer",
+        BearerFormat = "JWT",
+        In = Microsoft.OpenApi.Models.ParameterLocation.Header,
+        Description = "Please enter JWT with Bearer into field"
+    });
+
+    c.AddSecurityRequirement(new Microsoft.OpenApi.Models.OpenApiSecurityRequirement
     {
         {
-            new OpenApiSecurityScheme
+            new Microsoft.OpenApi.Models.OpenApiSecurityScheme
             {
-                Reference = new OpenApiReference
+                Reference = new Microsoft.OpenApi.Models.OpenApiReference
                 {
-                    Type = ReferenceType.SecurityScheme,
+                    Type = Microsoft.OpenApi.Models.ReferenceType.SecurityScheme,
                     Id = "Bearer"
                 }
             },
-            new string[] {}
+            new string[] { }
         }
     });
 });
 
 var app = builder.Build();
 
-// Custom Middleware to Handle 403 Forbidden Responses
-app.Use(async (context, next) =>
-{
-    await next();
-
-    if (context.Response.StatusCode == 403)
-    {
-        context.Response.ContentType = "application/json";
-        await context.Response.WriteAsync("{\"message\": \"Only admins can access this endpoint.\"}");
-    }
-});
-
-// Configure the HTTP request pipeline.
+// Middleware pipeline
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -91,8 +84,12 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.UseAuthentication(); // Enable JWT authentication
-app.UseAuthorization(); // Enable authorization
+
+app.UseCors("AllowSpecificOrigins");  // Apply CORS policy
+
+app.UseAuthentication(); // Must come before Authorization
+app.UseAuthorization();
+
 app.MapControllers();
 
 app.Run();

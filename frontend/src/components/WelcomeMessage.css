@@ -1,0 +1,53 @@
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background: linear-gradient(135deg, #ffc0cb, #ffe4e1, #ffb6c1);
+  height: 100vh;
+  overflow: hidden;
+}
+
+.welcome-message {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  color: #fff;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.welcome-message h1 {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  color: #ff69b4;
+}
+
+.welcome-message .brand {
+  color: #ff1493;
+  font-weight: bold;
+}
+
+.welcome-message p {
+  font-size: 1.5rem;
+  color: #fff0f5;
+}
+.icons {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.icon {
+  font-size: 2rem;
+  color: #ff69b4;
+  animation: float 2s infinite ease-in-out;
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}

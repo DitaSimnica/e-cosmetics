@@ -1,102 +1,189 @@
-﻿using backend.Data;
-using backend.Helpers;
-using backend.Models;
-using backend.Models.Enums;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 
-namespace backend.Controllers
+[ApiController]
+[Route("api/[controller]")]
+public class AuthController : ControllerBase
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class AuthController : ControllerBase
+    private readonly DataContext _context;
+    private readonly IConfiguration _configuration;
+
+    public AuthController(DataContext context, IConfiguration configuration)
     {
-        private readonly ApplicationDbContext _context;
-        private readonly JwtSettings _jwtSettings;
+        _context = context;
+        _configuration = configuration;
+    }
 
-        public AuthController(ApplicationDbContext context, IOptions<JwtSettings> jwtSettings)
+    [HttpPost("register")]
+    public async Task<ActionResult<string>> Register(RegisterDto request)
+    {
+        if (await _context.Users.AnyAsync(u => u.Email == request.Email))
+            return BadRequest("Email is already taken.");
+
+        if (request.Role.ToLower() != "admin" && request.Role.ToLower() != "customer")
+            return BadRequest("Role must be either 'Admin' or 'Customer'.");
+
+        CreatePasswordHash(request.Password, out byte[] passwordHash, out byte[] passwordSalt);
+
+        var user = new User
         {
-            _context = context;
-            _jwtSettings = jwtSettings.Value;
-        }
-
-        [HttpPost("register")]
-        public async Task<IActionResult> Register([FromBody] Register model)
-        {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-
-            // Validate UserType
-            if (!Enum.TryParse<UserType>(model.UserType, out var userType))
-                return BadRequest("Invalid user type. Must be 'Admin' or 'Customer'.");
-
-            // Check if email already exists
-            var existingUser = _context.Users.FirstOrDefault(u => u.Email == model.Email);
-            if (existingUser != null)
-                return BadRequest("Email is already registered.");
-
-            // Create new user
-            var user = new Users
-            {
-                FirstName = model.FirstName,
-                LastName = model.LastName,
-                Email = model.Email,
-                Password = BCrypt.Net.BCrypt.HashPassword(model.Password), // Using BCrypt to hash the password
-                UserType = userType, // Assign UserType
-                IsActive = true,
-                CreatedOn = DateTime.UtcNow
-            };
-
-            _context.Users.Add(user);
-            await _context.SaveChangesAsync();
-
-            return Ok("User  registered successfully.");
-        }
-
-        [HttpPost("login")]
-        public IActionResult Login([FromBody] Login model)
-        {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-
-            var user = _context.Users.SingleOrDefault(u => u.Email == model.Email);
-            if (user == null || !BCrypt.Net.BCrypt.Verify(model.Password, user.Password))
-            {
-                return Unauthorized("Invalid credentials.");
-            }
-
-            // Generate JWT Token
-            var token = GenerateJwtToken(user);
-            return Ok(new { Token = token });
-        }
-
-        private string GenerateJwtToken(Users user)
-        {
-            var claims = new[]
-            {
-                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                new Claim(ClaimTypes.Name, user.FirstName + " " + user.LastName),
-                new Claim(ClaimTypes.Email, user.Email),
-                new Claim(ClaimTypes.Role, user.UserType.ToString()) // Add UserType as a claim
+            Username = request.Username,
+            Email = request.Email,
+            Role = request.Role,
+            PasswordHash = passwordHash,
+            PasswordSalt = passwordSalt
         };
 
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.SecretKey));
-            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+        var tokens = CreateToken(user);
+        user.RefreshToken = tokens.RefreshToken;
+        user.TokenCreated = tokens.TokenCreated;
+        user.TokenExpires = tokens.TokenExpires;
 
-            var token = new JwtSecurityToken(
-                issuer: "https://localhost:7078",
-                audience: "https://localhost:7078",
-                claims: claims,
-                expires: DateTime.Now.AddHours(1),
-                signingCredentials: creds);
+        _context.Users.Add(user);
+        await _context.SaveChangesAsync();
 
-            return new JwtSecurityTokenHandler().WriteToken(token);
-        }
+        return Ok("User registered successfully.");
+    }
+
+    [HttpPost("login")]
+    public async Task<ActionResult<string>> Login(LoginDto request)
+    {
+        var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == request.Email);
+        if (user == null)
+            return BadRequest("User not found.");
+
+        if (!VerifyPasswordHash(request.Password, user.PasswordHash, user.PasswordSalt))
+            return BadRequest("Wrong password.");
+
+        var tokens = CreateToken(user);
+        user.RefreshToken = tokens.RefreshToken;
+        user.TokenCreated = tokens.TokenCreated;
+        user.TokenExpires = tokens.TokenExpires;
+
+        await _context.SaveChangesAsync();
+
+        // Store refresh token in cookie (optional)
+        Response.Cookies.Append("refreshToken", tokens.RefreshToken, new CookieOptions
+        {
+            HttpOnly = true,
+            SameSite = SameSiteMode.Strict,
+            Expires = tokens.TokenExpires
+        });
+
+        // Return the JWT and Refresh token as anonymous object
+        return Ok(new
+        {
+            token = tokens.JwtToken,
+            refreshToken = tokens.RefreshToken
+        });
+    }
+
+    [HttpPost("refresh-token")]
+    public async Task<ActionResult<string>> RefreshToken([FromBody] string refreshToken)
+    {
+        if (string.IsNullOrEmpty(refreshToken))
+            return Unauthorized("No refresh token provided.");
+
+        var user = await _context.Users.FirstOrDefaultAsync(u => u.RefreshToken == refreshToken);
+        if (user == null || user.TokenExpires < DateTime.UtcNow)
+            return Unauthorized("Invalid or expired refresh token.");
+
+        var tokens = CreateToken(user);
+        user.RefreshToken = tokens.RefreshToken;
+        user.TokenCreated = tokens.TokenCreated;
+        user.TokenExpires = tokens.TokenExpires;
+
+        await _context.SaveChangesAsync();
+
+        // Optionally update the refresh token in the cookies
+        Response.Cookies.Append("refreshToken", tokens.RefreshToken, new CookieOptions
+        {
+            HttpOnly = true,
+            SameSite = SameSiteMode.Strict,
+            Expires = tokens.TokenExpires
+        });
+
+        return Ok(new
+        {
+            token = tokens.JwtToken,
+            refreshToken = tokens.RefreshToken
+        });
+    }
+
+
+    [HttpPost("logout")]
+    public async Task<IActionResult> Logout([FromBody] string refreshToken)
+    {
+        if (string.IsNullOrEmpty(refreshToken))
+            return Unauthorized("No refresh token provided.");
+
+        var user = await _context.Users.FirstOrDefaultAsync(u => u.RefreshToken == refreshToken);
+        if (user == null)
+            return Unauthorized("Invalid refresh token.");
+
+        user.RefreshToken = null;
+        user.TokenCreated = DateTime.MinValue;
+        user.TokenExpires = DateTime.MinValue;
+
+        await _context.SaveChangesAsync();
+
+        // Optional: delete the cookie
+        Response.Cookies.Delete("refreshToken");
+
+        return Ok("Logged out successfully.");
+    }
+
+
+    // ====== Helpers ======
+
+    private void CreatePasswordHash(string password, out byte[] hash, out byte[] salt)
+    {
+        using var hmac = new HMACSHA512();
+        salt = hmac.Key;
+        hash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
+    }
+
+    private bool VerifyPasswordHash(string password, byte[] hash, byte[] salt)
+    {
+        using var hmac = new HMACSHA512(salt);
+        var computedHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
+        return computedHash.SequenceEqual(hash);
+    }
+
+    private (string JwtToken, string RefreshToken, DateTime TokenCreated, DateTime TokenExpires) CreateToken(User user)
+    {
+        var claims = new List<Claim>
+        {
+            new Claim(ClaimTypes.Name, user.Username),
+            new Claim(ClaimTypes.Email, user.Email),
+            new Claim(ClaimTypes.Role, user.Role),
+            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
+        };
+
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(
+            _configuration.GetSection("Jwt:Key").Value));
+
+        var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
+
+        var jwt = new JwtSecurityToken(
+            claims: claims,
+            expires: DateTime.UtcNow.AddMinutes(15),
+            signingCredentials: creds);
+
+        var jwtToken = new JwtSecurityTokenHandler().WriteToken(jwt);
+        var refreshToken = Convert.ToBase64String(RandomNumberGenerator.GetBytes(64));
+
+        return (
+            JwtToken: jwtToken,
+            RefreshToken: refreshToken,
+            TokenCreated: DateTime.UtcNow,
+            TokenExpires: DateTime.UtcNow.AddDays(7)
+        );
     }
 }
