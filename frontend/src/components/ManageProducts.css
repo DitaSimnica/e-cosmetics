@@ -1,0 +1,88 @@
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&display=swap');
+
+body {
+  font-family: 'Quicksand', sans-serif;
+  background-color: #fff6f9;
+  margin: 0;
+  padding: 0;
+}
+
+.product-page-cute {
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 20px;
+  background-color: #fff0f8;
+  border-radius: 20px;
+  box-shadow: 0 6px 16px rgba(255, 182, 193, 0.3);
+}
+
+h2 {
+  color: #d63384;
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.btn-pink {
+  background-color: #ffb6c1;
+  border: none;
+  color: white;
+  font-weight: bold;
+  padding: 10px 20px;
+  border-radius: 10px;
+  transition: background-color 0.3s ease;
+}
+
+.btn-pink:hover {
+  background-color: #ff91ac;
+}
+
+.card {
+  background-color: #ffe4ec;
+  border-radius: 15px;
+  box-shadow: 0 4px 10px rgba(255, 192, 203, 0.2);
+}
+
+.form-control {
+  border: 2px solid #ffd6e3;
+  border-radius: 10px;
+  padding: 10px;
+  font-size: 1rem;
+}
+
+.cute-list .list-group-item {
+  background-color: #fff6f9;
+  border: 1px solid #ffddee;
+  border-radius: 12px;
+  margin-bottom: 12px;
+  font-size: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.cute-list .btn-sm {
+  padding: 6px 12px;
+  font-size: 0.875rem;
+  border-radius: 8px;
+}
+
+.cute-list .btn-warning {
+  background-color: #ffdd99;
+  color: #5c2a00;
+  border: none;
+}
+
+.cute-list .btn-warning:hover {
+  background-color: #ffc966;
+}
+
+.cute-list .btn-danger {
+  background-color: #ff7f7f;
+  color: white;
+  border: none;
+}
+
+.cute-list .btn-danger:hover {
+  background-color: #ff4d4d;
+}

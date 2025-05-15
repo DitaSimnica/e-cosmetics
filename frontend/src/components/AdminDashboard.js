@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import api from '../utils/api'; // adjust if path differs
+import api from '../utils/api';
 import './AdminDashboard.css';
 
 const AdminDashboard = () => {
@@ -61,12 +61,13 @@ const AdminDashboard = () => {
       {/* Sidebar */}
       <div className="sidebar-cute d-flex flex-column p-3">
         <h4 className="text-center mb-4">💖 Admin Panel</h4>
-        <Link className="nav-link mb-3" to="/admin/products">
-          📦 Manage Products
+        <Link className="nav-link mb-3" to="/adminDashboard/products">
+        📦 Manage Products
         </Link>
-        <Link className="nav-link mb-3" to="/admin/users">
-          👥 Manage Users
+        <Link className="nav-link mb-3" to="/adminDashboard/users">
+        👥 Manage Users
         </Link>
+
         <button className="btn btn-outline-danger mt-auto" onClick={handleLogout}>
           🚪 Logout
         </button>
