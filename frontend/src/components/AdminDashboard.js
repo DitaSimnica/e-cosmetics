@@ -1,9 +1,55 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import './AdminDashboard.css'; // Custom styles
+import api from '../utils/api'; // adjust if path differs
+import './AdminDashboard.css';
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
+  const [userCount, setUserCount] = useState(0);
+  const [productCount, setProductCount] = useState(0);
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const token = localStorage.getItem('authToken');
+        const response = await api.get('/user', {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setUserCount(response.data.length);
+      } catch (error) {
+        console.error('Error fetching users:', error);
+        if (error.response?.status === 401 || error.response?.status === 403) {
+          navigate('/login');
+        }
+      }
+    };
+
+    const fetchProducts = async () => {
+  try {
+    const token = localStorage.getItem('authToken');
+    console.log('Token:', token);
+
+    const response = await api.get('/product', {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    console.log('Product response:', response.data);
+    setProductCount(response.data.length);
+  } catch (error) {
+    console.error('Error fetching products:', error.response?.data || error.message);
+  }
+};
+
+
+
+
+    fetchUsers();
+    fetchProducts();
+  }, [navigate]);
 
   const handleLogout = () => {
     localStorage.removeItem('authToken');
@@ -36,7 +82,7 @@ const AdminDashboard = () => {
             <div className="card card-cute shadow-sm">
               <div className="card-body text-center">
                 <h5 className="card-title">🛍️ Total Products</h5>
-                <p className="card-text fs-4">--</p>
+                <p className="card-text fs-4">{productCount}</p> {/* ✅ Product Count */}
               </div>
             </div>
           </div>
@@ -44,7 +90,7 @@ const AdminDashboard = () => {
             <div className="card card-cute shadow-sm">
               <div className="card-body text-center">
                 <h5 className="card-title">👩‍💻 Total Users</h5>
-                <p className="card-text fs-4">--</p>
+                <p className="card-text fs-4">{userCount}</p>
               </div>
             </div>
           </div>
@@ -52,7 +98,7 @@ const AdminDashboard = () => {
             <div className="card card-cute shadow-sm">
               <div className="card-body text-center">
                 <h5 className="card-title">📦 Total Orders</h5>
-                <p className="card-text fs-4">--</p>
+                <p className="card-text fs-4">--</p> {/* Next: Orders */}
               </div>
             </div>
           </div>

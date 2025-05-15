@@ -17,19 +17,12 @@ namespace backend.Controllers
             _context = context;
         }
 
-        // GET: api/products
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Product>>> GetProducts([FromQuery] string search)
+        public async Task<ActionResult<IEnumerable<Product>>> GetProducts()
         {
-            if (!string.IsNullOrEmpty(search))
-            {
-                return await _context.Products
-                    .Where(p => p.Name.Contains(search))
-                    .ToListAsync();
-            }
-
             return await _context.Products.ToListAsync();
         }
+
 
         // GET: api/products/5
         [HttpGet("{id}")]
