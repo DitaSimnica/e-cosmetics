@@ -7,6 +7,7 @@ body {
   padding: 0;
 }
 
+/* Main container */
 .product-page-cute {
   max-width: 900px;
   margin: 40px auto;
@@ -16,6 +17,7 @@ body {
   box-shadow: 0 6px 16px rgba(255, 182, 193, 0.3);
 }
 
+/* Heading */
 h2 {
   color: #d63384;
   font-weight: 600;
@@ -23,6 +25,7 @@ h2 {
   margin-bottom: 30px;
 }
 
+/* Pink button */
 .btn-pink {
   background-color: #ffb6c1;
   border: none;
@@ -37,19 +40,37 @@ h2 {
   background-color: #ff91ac;
 }
 
+/* Card container for form */
 .card {
   background-color: #ffe4ec;
   border-radius: 15px;
   box-shadow: 0 4px 10px rgba(255, 192, 203, 0.2);
 }
 
+/* Form fields */
 .form-control {
   border: 2px solid #ffd6e3;
   border-radius: 10px;
   padding: 10px;
   font-size: 1rem;
+  margin-bottom: 10px;
 }
 
+button.btn-success {
+  background-color: #d85d93;
+  border: none;
+  color: white;
+  font-weight: bold;
+  padding: 10px 20px;
+  border-radius: 10px;
+  transition: background-color 0.3s ease;
+}
+
+button.btn-success:hover {
+  background-color: #c94d85;
+}
+
+/* Product List Items */
 .cute-list .list-group-item {
   background-color: #fff6f9;
   border: 1px solid #ffddee;
@@ -59,14 +80,28 @@ h2 {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding: 15px;
+  flex-wrap: wrap;
 }
 
+/* Image Styling */
+.cute-list img {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 10px;
+  margin-top: 8px;
+}
+
+/* Buttons inside list */
 .cute-list .btn-sm {
   padding: 6px 12px;
   font-size: 0.875rem;
   border-radius: 8px;
+  margin-left: 5px;
 }
 
+/* Edit Button */
 .cute-list .btn-warning {
   background-color: #ffdd99;
   color: #5c2a00;
@@ -77,6 +112,7 @@ h2 {
   background-color: #ffc966;
 }
 
+/* Delete Button */
 .cute-list .btn-danger {
   background-color: #ff7f7f;
   color: white;
@@ -85,4 +121,11 @@ h2 {
 
 .cute-list .btn-danger:hover {
   background-color: #ff4d4d;
+}
+
+/* Description text */
+.description-text {
+  color: #8a4f68;
+  margin-top: 5px;
+  font-size: 0.9rem;
 }

@@ -5,7 +5,12 @@ import './ManageProducts.css';
 const ManageProducts = () => {
   const [products, setProducts] = useState([]);
   const [showForm, setShowForm] = useState(false);
-  const [newProduct, setNewProduct] = useState({ name: '', price: '' });
+  const [newProduct, setNewProduct] = useState({
+    name: '',
+    description: '',
+    price: '',
+    imageUrl: ''
+  });
 
   const fetchProducts = async () => {
     const token = localStorage.getItem('authToken');
@@ -35,14 +40,15 @@ const ManageProducts = () => {
     }
   };
 
-  const handleAddProduct = async () => {
+  const handleAddProduct = async (e) => {
+    e.preventDefault();
     const token = localStorage.getItem('authToken');
     try {
       await api.post('/product', newProduct, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setShowForm(false);
-      setNewProduct({ name: '', price: '' });
+      setNewProduct({ name: '', description: '', price: '', imageUrl: '' });
       fetchProducts();
     } catch (error) {
       console.error('Error adding product:', error);
@@ -57,29 +63,57 @@ const ManageProducts = () => {
       </button>
 
       {showForm && (
-        <div className="card p-3 mb-4">
+        <form className="card p-3 mb-4 cute-form" onSubmit={handleAddProduct}>
           <input
             className="form-control mb-2"
             type="text"
             placeholder="Product Name"
             value={newProduct.name}
             onChange={(e) => setNewProduct({ ...newProduct, name: e.target.value })}
+            required
+          />
+          <textarea
+            className="form-control mb-2"
+            placeholder="Description"
+            rows="3"
+            value={newProduct.description}
+            onChange={(e) => setNewProduct({ ...newProduct, description: e.target.value })}
+            required
           />
           <input
             className="form-control mb-2"
             type="number"
+            step="0.01"
             placeholder="Price"
             value={newProduct.price}
             onChange={(e) => setNewProduct({ ...newProduct, price: e.target.value })}
+            required
           />
-          <button className="btn btn-success" onClick={handleAddProduct}>Save Product</button>
-        </div>
+          <input
+            className="form-control mb-3"
+            type="text"
+            placeholder="Image URL"
+            value={newProduct.imageUrl}
+            onChange={(e) => setNewProduct({ ...newProduct, imageUrl: e.target.value })}
+          />
+          <button type="submit" className="btn btn-success">💾 Save Product</button>
+        </form>
       )}
 
       <ul className="list-group cute-list">
         {products.map((product) => (
           <li className="list-group-item d-flex justify-content-between align-items-center" key={product.id}>
-            <span>{product.name} - ${product.price}</span>
+            <div>
+              <strong>{product.name}</strong> - ${product.price}
+              <p className="mb-1 text-muted">{product.description}</p>
+              {product.imageUrl && (
+                <img
+                  src={product.imageUrl}
+                  alt={product.name}
+                  style={{ width: '60px', height: '60px', borderRadius: '10px' }}
+                />
+              )}
+            </div>
             <div>
               <button className="btn btn-warning btn-sm me-2">Edit</button>
               <button className="btn btn-danger btn-sm" onClick={() => handleDelete(product.id)}>Delete</button>
