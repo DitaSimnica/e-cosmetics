@@ -1,4 +1,3 @@
-// src/components/ManageUsers.jsx
 import React, { useEffect, useState } from 'react';
 import api from '../utils/api';
 import { useNavigate } from 'react-router-dom';
@@ -27,6 +26,28 @@ const ManageUsers = () => {
     fetchUsers();
   }, [navigate]);
 
+  const handleEdit = (userId) => {
+    alert(`Edit user with ID: ${userId}`);
+    // Future: navigate to edit user page or open modal
+  };
+
+  const handleDelete = async (userId) => {
+    const confirm = window.confirm("Are you sure you want to delete this user?");
+    if (!confirm) return;
+
+    try {
+      const token = localStorage.getItem('authToken');
+      await api.delete(`/user/${userId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      // Remove deleted user from UI
+      setUsers((prev) => prev.filter((user) => user.id !== userId));
+    } catch (error) {
+      console.error('Error deleting user:', error);
+    }
+  };
+
   return (
     <div className="page-wrapper">
       <h2 className="page-title">👩‍💼 Manage Users</h2>
@@ -41,6 +62,7 @@ const ManageUsers = () => {
                 <th>Username</th>
                 <th>Email</th>
                 <th>Role</th>
+                <th className="text-center">Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -53,6 +75,10 @@ const ManageUsers = () => {
                     <span className="badge-cute">
                       {user.role === 'Admin' ? '💼 Admin' : '👤 Customer'}
                     </span>
+                  </td>
+                  <td className="text-center">
+                    <button className="btn-edit" onClick={() => handleEdit(user.id)}>Edit</button>
+                    <button className="btn-delete" onClick={() => handleDelete(user.id)}>Delete</button>
                   </td>
                 </tr>
               ))}
