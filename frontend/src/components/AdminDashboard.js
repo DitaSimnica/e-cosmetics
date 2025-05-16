@@ -2,6 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import api from '../utils/api';
 import './AdminDashboard.css';
+import { FaRegHeart, FaUserFriends } from 'react-icons/fa';
+import { GiLipstick, GiPerfumeBottle, GiGiftOfKnowledge } from 'react-icons/gi';
+import { MdFaceRetouchingNatural } from 'react-icons/md';
+import { IoMdExit } from 'react-icons/io';
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
@@ -60,16 +64,16 @@ const AdminDashboard = () => {
     <div className="admin-dashboard-wrapper d-flex">
       {/* Sidebar */}
       <div className="sidebar-cute d-flex flex-column p-3">
-        <h4 className="text-center mb-4">💖 Admin Panel</h4>
+        <h4 className="text-center mb-4"><FaRegHeart /> Admin Panel</h4>
         <Link className="nav-link mb-3" to="/adminDashboard/products">
-        📦 Manage Products
+        <GiLipstick className="me-2" /> Manage Products
         </Link>
         <Link className="nav-link mb-3" to="/adminDashboard/users">
-        👥 Manage Users
+        <MdFaceRetouchingNatural className="me-2" /> Manage Users
         </Link>
 
         <button className="btn btn-outline-danger mt-auto" onClick={handleLogout}>
-          🚪 Logout
+          <IoMdExit className="me-2" /> Logout
         </button>
       </div>
 
@@ -82,7 +86,7 @@ const AdminDashboard = () => {
           <div className="col-md-4 mb-4">
             <div className="card card-cute shadow-sm">
               <div className="card-body text-center">
-                <h5 className="card-title">🛍️ Total Products</h5>
+                <h5 className="card-title"><GiPerfumeBottle className="me-2" /> Total Products</h5>
                 <p className="card-text fs-4">{productCount}</p> {/* ✅ Product Count */}
               </div>
             </div>
@@ -90,7 +94,7 @@ const AdminDashboard = () => {
           <div className="col-md-4 mb-4">
             <div className="card card-cute shadow-sm">
               <div className="card-body text-center">
-                <h5 className="card-title">👩‍💻 Total Users</h5>
+                <h5 className="card-title"><FaUserFriends className="me-2" /> Total Users</h5>
                 <p className="card-text fs-4">{userCount}</p>
               </div>
             </div>
@@ -98,7 +102,7 @@ const AdminDashboard = () => {
           <div className="col-md-4 mb-4">
             <div className="card card-cute shadow-sm">
               <div className="card-body text-center">
-                <h5 className="card-title">📦 Total Orders</h5>
+                <h5 className="card-title"><GiGiftOfKnowledge className="me-2" /> Total Orders</h5>
                 <p className="card-text fs-4">--</p> {/* Next: Orders */}
               </div>
             </div>

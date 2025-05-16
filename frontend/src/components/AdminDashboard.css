@@ -71,8 +71,18 @@ body {
   border-radius: 20px;
   margin: 20px;
   box-shadow: 0 8px 20px rgba(255, 182, 193, 0.15);
+  animation: fadeInUp 0.8s ease;
 }
-
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  } 
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 .main-cute h2 {
   color: #d63384;
   font-weight: 700;
@@ -84,7 +94,7 @@ body {
 
 /* Card Styles */
 .card-cute {
-  background-color: #fff0f5;
+  background: linear-gradient(135deg, #ffe6f0, #ffc0cb);
   border: none;
   border-radius: 18px;
   padding: 1rem;
