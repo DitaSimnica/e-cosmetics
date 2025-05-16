@@ -31,6 +31,10 @@
   transition: background-color 0.3s;
 }
 
+.table-cute tbody tr {
+  transition: background-color 0.3s, transform 0.3s;
+}
+
 .badge-cute {
   display: inline-block;
   background-color: #ffd6e8;
@@ -57,6 +61,7 @@
   margin-bottom: 1.5rem;
   text-align: center;
 }
+
 .btn-edit,
 .btn-delete {
   padding: 6px 12px;
@@ -85,4 +90,28 @@
 
 .btn-delete:hover {
   background-color: #f1aeb5;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-muted {
+  color: #888;
+}
+
+/* ✨ Animation for table on load */
+@keyframes fadeSlideIn {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-table {
+  animation: fadeSlideIn 0.6s ease-out;
 }

@@ -41,7 +41,6 @@ const ManageUsers = () => {
         headers: { Authorization: `Bearer ${token}` },
       });
 
-      // Remove deleted user from UI
       setUsers((prev) => prev.filter((user) => user.id !== userId));
     } catch (error) {
       console.error('Error deleting user:', error);
@@ -54,7 +53,7 @@ const ManageUsers = () => {
       {users.length === 0 ? (
         <p className="text-center text-muted">No users found 💔</p>
       ) : (
-        <div className="table-cute-wrapper">
+        <div className="table-cute-wrapper animate-table">
           <table className="table-cute">
             <thead>
               <tr>
