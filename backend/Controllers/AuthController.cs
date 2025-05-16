@@ -80,7 +80,8 @@ public class AuthController : ControllerBase
         return Ok(new
         {
             token = tokens.JwtToken,
-            refreshToken = tokens.RefreshToken
+            refreshToken = tokens.RefreshToken,
+            role = user.Role
         });
     }
 

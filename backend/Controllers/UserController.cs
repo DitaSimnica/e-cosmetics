@@ -41,6 +41,35 @@ namespace YourProject.Controllers  // Adjust with your actual namespace
             return Ok(users);
         }
 
+        [Authorize]
+        [HttpGet("me")]
+        public async Task<ActionResult<UserDto>> GetCurrentUser()
+        {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (userIdClaim == null)
+                return Unauthorized("User ID not found in token.");
+
+            if (!int.TryParse(userIdClaim, out int userId))
+                return BadRequest("Invalid user ID format.");
+
+            var user = await _context.Users
+                .Where(u => u.Id == userId)
+                .Select(u => new UserDto
+                {
+                    Id = u.Id,
+                    Username = u.Username,
+                    Email = u.Email,
+                    Role = u.Role
+                })
+                .FirstOrDefaultAsync();
+
+            if (user == null)
+                return NotFound("User not found.");
+
+            return Ok(user);
+        }
+
         // Get the currently logged-in user or a specific user by ID (only their own data)
         [Authorize]
         [HttpGet("{id}")]

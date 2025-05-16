@@ -1,0 +1,66 @@
+.customer-dashboard-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: linear-gradient(to bottom right, #fff0f5, #ffe4ec);
+  font-family: 'Quicksand', sans-serif;
+}
+
+.dashboard-box {
+  background-color: #fff;
+  padding: 3rem;
+  border-radius: 25px;
+  box-shadow: 0 8px 16px rgba(255, 182, 193, 0.25);
+  text-align: center;
+  max-width: 500px;
+}
+
+.dashboard-box h2 {
+  color: #d63384;
+  margin-bottom: 1rem;
+}
+
+.dashboard-box p {
+  color: #6b0f1a;
+  margin-bottom: 2rem;
+}
+
+.actions .btn {
+  display: block;
+  width: 100%;
+  margin-bottom: 1rem;
+  padding: 12px;
+  border: none;
+  border-radius: 12px;
+  font-weight: bold;
+  font-size: 1rem;
+  transition: all 0.3s;
+}
+
+.btn-shop {
+  background-color: #ffb6c1;
+  color: white;
+}
+
+.btn-shop:hover {
+  background-color: #ff99b9;
+}
+
+.btn-orders {
+  background-color: #ffd6e8;
+  color: #880e4f;
+}
+
+.btn-orders:hover {
+  background-color: #ffcce0;
+}
+
+.btn-logout {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+.btn-logout:hover {
+  background-color: #f1b0b7;
+}

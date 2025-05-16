@@ -15,12 +15,19 @@ function Login() {
 
     try {
       const response = await api.post('/auth/login', { email, password });
-      const { token, refreshToken } = response.data;
+      const { token, refreshToken, role } = response.data;
 
       localStorage.setItem('authToken', token);
-      localStorage.setItem('refreshToken', refreshToken); // optional but useful
+      localStorage.setItem('refreshToken', refreshToken);
+      localStorage.setItem('userRole', role);
 
-      navigate('/admindashboard');
+      if (role === 'Admin') {
+        navigate('/admindashboard');
+      } else if (role === 'Customer') {
+        navigate('/customerdashboard');
+      } else {
+        setError('Unknown user role. Please contact support.');
+      }
     } catch (err) {
       setError('Login failed. Please check your credentials.');
       console.error('Login error:', err);

@@ -6,6 +6,8 @@ import Register from './components/Register';
 import AdminDashboard from './components/AdminDashboard';
 import ManageProducts from './components/ManageProducts';
 import ManageUsers from './components/ManageUsers';
+import CustomerDashboard from './components/CustomerDashboard';
+
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -37,7 +39,7 @@ function App() {
           path="/adminDashboard/users"
           element={isAuthenticated ? <ManageUsers /> : <Navigate to="/login" />}
         />
-
+        <Route path="/customerDashboard" element={<CustomerDashboard />} />
         {/* Redirect unknown paths to welcome */}
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
