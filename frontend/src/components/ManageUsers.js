@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import api from '../utils/api';
 import { useNavigate } from 'react-router-dom';
+import './ManageUsers.css';
 
 const ManageUsers = () => {
   const [users, setUsers] = useState([]);
@@ -27,32 +28,37 @@ const ManageUsers = () => {
   }, [navigate]);
 
   return (
-    <div className="p-4">
-      <h2 className="mb-4">👥 Manage Users</h2>
+    <div className="page-wrapper">
+      <h2 className="page-title">👩‍💼 Manage Users</h2>
       {users.length === 0 ? (
-        <p>No users found.</p>
+        <p className="text-center text-muted">No users found 💔</p>
       ) : (
-        <table className="table table-bordered table-striped">
-          <thead className="table-dark">
-            <tr>
-              <th>ID</th>
-              <th>Username</th>
-              <th>Email</th>
-              <th>Role</th>
-              {/* You can add Edit/Delete buttons later */}
-            </tr>
-          </thead>
-          <tbody>
-            {users.map((user) => (
-              <tr key={user.id}>
-                <td>{user.id}</td>
-                <td>{user.username}</td>
-                <td>{user.email}</td>
-                <td>{user.role}</td>
+        <div className="table-cute-wrapper">
+          <table className="table-cute">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Role</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {users.map((user) => (
+                <tr key={user.id}>
+                  <td>{user.id}</td>
+                  <td>{user.username}</td>
+                  <td>{user.email}</td>
+                  <td>
+                    <span className="badge-cute">
+                      {user.role === 'Admin' ? '💼 Admin' : '👤 Customer'}
+                    </span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       )}
     </div>
   );
