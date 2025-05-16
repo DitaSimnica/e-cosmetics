@@ -5,6 +5,7 @@ import Login from './components/Login';
 import Register from './components/Register';
 import AdminDashboard from './components/AdminDashboard';
 import ManageProducts from './components/ManageProducts';
+import ManageUsers from './components/ManageUsers';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -31,6 +32,10 @@ function App() {
         <Route
           path="/adminDashboard/products"
           element={isAuthenticated ? <ManageProducts /> : <Navigate to="/login" />}
+        />
+        <Route
+          path="/adminDashboard/users"
+          element={isAuthenticated ? <ManageUsers /> : <Navigate to="/login" />}
         />
 
         {/* Redirect unknown paths to welcome */}
