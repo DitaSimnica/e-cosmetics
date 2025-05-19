@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from "react";
 import axios from "../utils/api";
 import { toast } from "react-toastify";
+import { FaShoppingCart } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 import "./ProductsPage.css";
 
 const ProductsPage = () => {
   const [products, setProducts] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -20,7 +23,7 @@ const ProductsPage = () => {
   }, []);
 
   const handleAddToCart = async (productId) => {
-      console.log("Add to cart clicked", productId); // Check this shows up
+    console.log("Add to cart clicked", productId);
     try {
       await axios.post("/cart/add", {
         productId,
@@ -34,7 +37,16 @@ const ProductsPage = () => {
 
   return (
     <div className="products-page">
-      <h1 className="products-page__title">Our Lovely Products</h1>
+      <div className="products-header">
+        <h1 className="products-page__title">Our Lovely Products</h1>
+        <FaShoppingCart
+          size={26}
+          className="cart-icon"
+          onClick={() => navigate("/cart")}
+          style={{ cursor: "pointer", color: "#e96ca3" }}
+        />
+      </div>
+
       <div className="products-grid">
         {products.map((product) => (
           <div key={product.id} className="product-card">

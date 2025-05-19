@@ -8,7 +8,7 @@ import ManageProducts from './components/ManageProducts';
 import ManageUsers from './components/ManageUsers';
 import CustomerDashboard from './components/CustomerDashboard';
 import ProductsPage from './components/ProductsPage';
-
+import CartPage from "./components/CartPage";
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -42,6 +42,7 @@ function App() {
         />
         <Route path="/customerDashboard" element={<CustomerDashboard />} />
         <Route path="/shop" element={<ProductsPage />} />
+        <Route path="/cart" element={<CartPage />} />
         {/* Redirect unknown paths to welcome */}
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>

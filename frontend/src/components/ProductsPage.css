@@ -9,13 +9,30 @@
   font-family: 'Quicksand', sans-serif;
 }
 
+/* Header with title and cart icon */
+.products-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
 .products-page__title {
-  text-align: center;
   font-size: 2.5rem; /* 40px */
   color: #db2777; /* pink-600 */
   font-weight: 600;
-  margin-bottom: 2rem;
   text-shadow: 0 2px 4px rgba(219, 39, 119, 0.4);
+  margin: 0;
+}
+
+.cart-icon {
+  cursor: pointer;
+  color: #e96ca3;
+  transition: color 0.3s ease;
+}
+
+.cart-icon:hover {
+  color: #be185d;
 }
 
 .products-grid {
