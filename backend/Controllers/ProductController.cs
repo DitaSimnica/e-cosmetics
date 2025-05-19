@@ -7,7 +7,7 @@ namespace backend.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "Admin")] // Only admins can access these endpoints
+    //[Authorize(Roles = "Admin")] // Only admins can access these endpoints
     public class ProductController : ControllerBase
     {
         private readonly DataContext _context;
@@ -18,6 +18,7 @@ namespace backend.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public async Task<ActionResult<IEnumerable<Product>>> GetProducts()
         {
             return await _context.Products.ToListAsync();
@@ -26,6 +27,7 @@ namespace backend.Controllers
 
         // GET: api/products/5
         [HttpGet("{id}")]
+        [AllowAnonymous]
         public async Task<ActionResult<Product>> GetProduct(int id)
         {
             var product = await _context.Products.FindAsync(id);
@@ -36,6 +38,7 @@ namespace backend.Controllers
 
         // POST: api/products
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<Product>> CreateProduct(Product product)
         {
             _context.Products.Add(product);
@@ -46,6 +49,7 @@ namespace backend.Controllers
 
         // PUT: api/products/5
         [HttpPut("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> UpdateProduct(int id, Product product)
         {
             if (id != product.Id) return BadRequest();
@@ -67,6 +71,7 @@ namespace backend.Controllers
 
         // DELETE: api/products/5
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteProduct(int id)
         {
             var product = await _context.Products.FindAsync(id);

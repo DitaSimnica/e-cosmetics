@@ -7,6 +7,7 @@ import AdminDashboard from './components/AdminDashboard';
 import ManageProducts from './components/ManageProducts';
 import ManageUsers from './components/ManageUsers';
 import CustomerDashboard from './components/CustomerDashboard';
+import ProductsPage from './components/ProductsPage';
 
 
 function App() {
@@ -40,6 +41,7 @@ function App() {
           element={isAuthenticated ? <ManageUsers /> : <Navigate to="/login" />}
         />
         <Route path="/customerDashboard" element={<CustomerDashboard />} />
+        <Route path="/shop" element={<ProductsPage />} />
         {/* Redirect unknown paths to welcome */}
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
