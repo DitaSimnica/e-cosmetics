@@ -76,3 +76,31 @@
 .add-to-cart-btn:hover {
   background: #ec407a;
 }
+.filters {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-bottom: 30px;
+  flex-wrap: wrap;
+}
+
+.search-bar {
+  padding: 10px 15px;
+  border: 2px solid #f8bbd0;
+  border-radius: 50px;
+  font-family: 'Quicksand', sans-serif;
+  font-size: 1rem;
+  width: 250px;
+  outline: none;
+}
+
+.category-select {
+  padding: 10px 15px;
+  border: 2px solid #f8bbd0;
+  border-radius: 50px;
+  font-family: 'Quicksand', sans-serif;
+  font-size: 1rem;
+  background-color: #fff0f6;
+  cursor: pointer;
+  outline: none;
+}
