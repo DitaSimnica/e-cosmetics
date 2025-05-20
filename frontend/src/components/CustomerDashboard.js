@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import api from '../utils/api';
 import './CustomerDashboard.css';
 
@@ -31,11 +32,16 @@ const CustomerDashboard = () => {
     navigate('/login');
   };
 
-  if (!user) return <p>Loading your cute dashboard... 🩷</p>;
+  if (!user) return <p className="loading-text">Loading your cute dashboard... 🩷</p>;
 
   return (
     <div className="customer-dashboard-wrapper">
-      <div className="dashboard-box">
+      <motion.div
+        className="dashboard-box"
+        initial={{ opacity: 0, y: 40 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, ease: 'easeOut' }}
+      >
         <h2>Welcome, {user.username} 🌸</h2>
         <p>We're so glad to see you again!</p>
         <div className="actions">
@@ -49,7 +55,7 @@ const CustomerDashboard = () => {
             🚪 Logout
           </button>
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 };
