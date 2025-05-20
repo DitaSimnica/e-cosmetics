@@ -1,7 +1,7 @@
 ﻿using backend.Models;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 
@@ -18,7 +18,8 @@ namespace backend.Controllers
             _context = context;
         }
 
-        // GET: api/order
+        // GET: api/order (get current user's orders)
+        [Authorize]
         [HttpGet]
         public async Task<IActionResult> GetOrders()
         {
@@ -32,7 +33,8 @@ namespace backend.Controllers
             return Ok(orders);
         }
 
-        // POST: api/order
+        // POST: api/order (place order from cart)
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> PlaceOrder([FromBody] PlaceOrderDto dto)
         {
@@ -52,12 +54,12 @@ namespace backend.Controllers
                 OrderDate = DateTime.UtcNow,
                 Status = "Pending",
                 TotalAmount = cart.TotalAmount,
-                Products = cart.Products.Select(cp => cp.Product).ToList() // note: see suggestions below
+                Products = cart.Products.Select(cp => cp.Product).ToList()
             };
 
             _context.Orders.Add(order);
 
-            // Clear Cart
+            // Clear cart
             cart.Products.Clear();
             cart.TotalAmount = 0;
 
@@ -65,6 +67,8 @@ namespace backend.Controllers
 
             return Ok(order);
         }
+
+        // GET: api/order/my-orders (customer-specific view)
         [Authorize]
         [HttpGet("my-orders")]
         public async Task<IActionResult> GetMyOrders()
@@ -72,9 +76,7 @@ namespace backend.Controllers
             var userIdStr = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             if (!int.TryParse(userIdStr, out int userId))
-            {
                 return Unauthorized("Invalid user ID.");
-            }
 
             var orders = await _context.Orders
                 .Where(o => o.UserId == userId)
@@ -83,6 +85,17 @@ namespace backend.Controllers
             return Ok(orders);
         }
 
+        // ✅✅✅ NEW: GET all orders (admin only)
+        [Authorize(Roles = "Admin")]
+        [HttpGet("all")]
+        public async Task<IActionResult> GetAllOrders()
+        {
+            var orders = await _context.Orders
+                .Include(o => o.Products)
+                .Include(o => o.User) // if you want user info too
+                .ToListAsync();
 
+            return Ok(orders);
+        }
     }
 }

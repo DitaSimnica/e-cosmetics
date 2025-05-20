@@ -11,15 +11,15 @@ const AdminDashboard = () => {
   const navigate = useNavigate();
   const [userCount, setUserCount] = useState(0);
   const [productCount, setProductCount] = useState(0);
+  const [orderCount, setOrderCount] = useState(0); // ✅ New state
 
   useEffect(() => {
+    const token = localStorage.getItem('authToken');
+
     const fetchUsers = async () => {
       try {
-        const token = localStorage.getItem('authToken');
         const response = await api.get('/user', {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          headers: { Authorization: `Bearer ${token}` },
         });
         setUserCount(response.data.length);
       } catch (error) {
@@ -31,28 +31,33 @@ const AdminDashboard = () => {
     };
 
     const fetchProducts = async () => {
-  try {
-    const token = localStorage.getItem('authToken');
-    console.log('Token:', token);
+      try {
+        const response = await api.get('/product', {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setProductCount(response.data.length);
+      } catch (error) {
+        console.error('Error fetching products:', error);
+      }
+    };
 
-    const response = await api.get('/product', {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
-    console.log('Product response:', response.data);
-    setProductCount(response.data.length);
-  } catch (error) {
-    console.error('Error fetching products:', error.response?.data || error.message);
-  }
-};
-
-
-
+    const fetchOrders = async () => {
+      try {
+        const response = await api.get('/order/all', {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setOrderCount(response.data.length);
+      } catch (error) {
+        console.error('Error fetching orders:', error);
+        if (error.response?.status === 401 || error.response?.status === 403) {
+          navigate('/login');
+        }
+      }
+    };
 
     fetchUsers();
     fetchProducts();
+    fetchOrders(); // ✅ Fetch orders too
   }, [navigate]);
 
   const handleLogout = () => {
@@ -62,22 +67,19 @@ const AdminDashboard = () => {
 
   return (
     <div className="admin-dashboard-wrapper d-flex">
-      {/* Sidebar */}
       <div className="sidebar-cute d-flex flex-column p-3">
         <h4 className="text-center mb-4"><FaRegHeart /> Admin Panel</h4>
         <Link className="nav-link mb-3" to="/adminDashboard/products">
-        <GiLipstick className="me-2" /> Manage Products
+          <GiLipstick className="me-2" /> Manage Products
         </Link>
         <Link className="nav-link mb-3" to="/adminDashboard/users">
-        <MdFaceRetouchingNatural className="me-2" /> Manage Users
+          <MdFaceRetouchingNatural className="me-2" /> Manage Users
         </Link>
-
         <button className="btn btn-outline-danger mt-auto" onClick={handleLogout}>
           <IoMdExit className="me-2" /> Logout
         </button>
       </div>
 
-      {/* Main Content */}
       <div className="main-cute p-4 w-100">
         <h2 className="mb-3">Welcome Admin 🌸</h2>
         <p className="mb-4">Here's a snapshot of your dashboard:</p>
@@ -87,7 +89,7 @@ const AdminDashboard = () => {
             <div className="card card-cute shadow-sm">
               <div className="card-body text-center">
                 <h5 className="card-title"><GiPerfumeBottle className="me-2" /> Total Products</h5>
-                <p className="card-text fs-4">{productCount}</p> {/* ✅ Product Count */}
+                <p className="card-text fs-4">{productCount}</p>
               </div>
             </div>
           </div>
@@ -103,7 +105,7 @@ const AdminDashboard = () => {
             <div className="card card-cute shadow-sm">
               <div className="card-body text-center">
                 <h5 className="card-title"><GiGiftOfKnowledge className="me-2" /> Total Orders</h5>
-                <p className="card-text fs-4">--</p> {/* Next: Orders */}
+                <p className="card-text fs-4">{orderCount}</p> {/* ✅ Show order count */}
               </div>
             </div>
           </div>
