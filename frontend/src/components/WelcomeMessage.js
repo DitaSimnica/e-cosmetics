@@ -8,11 +8,19 @@ const WelcomeMessage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const timer = setTimeout(() => {
+    const fadeTimer = setTimeout(() => {
+      const el = document.querySelector('.welcome-message');
+      if (el) el.style.opacity = '0';
+    }, 2500);
+
+    const navTimer = setTimeout(() => {
       navigate('/login');
     }, 3000);
 
-    return () => clearTimeout(timer);
+    return () => {
+      clearTimeout(navTimer);
+      clearTimeout(fadeTimer);
+    };
   }, [navigate]);
 
   return (

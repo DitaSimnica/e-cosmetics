@@ -1,9 +1,37 @@
+@import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
+
 body {
   margin: 0;
   font-family: 'Segoe UI', sans-serif;
   background: linear-gradient(135deg, #ffc0cb, #ffe4e1, #ffb6c1);
   height: 100vh;
   overflow: hidden;
+  position: relative;
+}
+
+/* Sparkle effect */
+body::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: radial-gradient(#fff5f8 1px, transparent 1px);
+  background-size: 20px 20px;
+  opacity: 0.3;
+  animation: shimmer 5s linear infinite;
+  pointer-events: none;
+  z-index: 1;
+}
+
+@keyframes shimmer {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: 100% 100%;
+  }
 }
 
 .welcome-message {
@@ -14,6 +42,13 @@ body {
   height: 100vh;
   color: #fff;
   text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 0 30px rgba(255, 192, 203, 0.4);
+  border-radius: 20px;
+  padding: 2rem;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  transition: opacity 0.5s ease;
+  z-index: 2;
 }
 
 .welcome-message h1 {
@@ -25,12 +60,14 @@ body {
 .welcome-message .brand {
   color: #ff1493;
   font-weight: bold;
+  font-family: 'Pacifico', cursive;
 }
 
 .welcome-message p {
   font-size: 1.5rem;
   color: #fff0f5;
 }
+
 .icons {
   display: flex;
   gap: 20px;
@@ -41,6 +78,14 @@ body {
   font-size: 2rem;
   color: #ff69b4;
   animation: float 2s infinite ease-in-out;
+}
+
+.icon:nth-child(2) {
+  animation-delay: 0.3s;
+}
+
+.icon:nth-child(3) {
+  animation-delay: 0.6s;
 }
 
 @keyframes float {
