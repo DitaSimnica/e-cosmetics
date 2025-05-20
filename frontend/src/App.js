@@ -9,6 +9,7 @@ import ManageUsers from './components/ManageUsers';
 import CustomerDashboard from './components/CustomerDashboard';
 import ProductsPage from './components/ProductsPage';
 import CartPage from "./components/CartPage";
+import MyOrdersPage from './components/MyOrdersPage';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -43,6 +44,7 @@ function App() {
         <Route path="/customerDashboard" element={<CustomerDashboard />} />
         <Route path="/shop" element={<ProductsPage />} />
         <Route path="/cart" element={<CartPage />} />
+        <Route path="/orders" element={<MyOrdersPage />} />
         {/* Redirect unknown paths to welcome */}
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>

@@ -1,4 +1,5 @@
 ﻿using backend.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -64,5 +65,24 @@ namespace backend.Controllers
 
             return Ok(order);
         }
+        [Authorize]
+        [HttpGet("my-orders")]
+        public async Task<IActionResult> GetMyOrders()
+        {
+            var userIdStr = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (!int.TryParse(userIdStr, out int userId))
+            {
+                return Unauthorized("Invalid user ID.");
+            }
+
+            var orders = await _context.Orders
+                .Where(o => o.UserId == userId)
+                .ToListAsync();
+
+            return Ok(orders);
+        }
+
+
     }
 }

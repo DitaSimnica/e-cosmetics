@@ -23,9 +23,19 @@ const CartPage = () => {
     try {
       await axios.delete(`/cart/remove/${productId}`);
       toast.success("Product removed!");
-      fetchCart(); // Refresh cart
+      fetchCart();
     } catch (err) {
       toast.error("Failed to remove product.");
+    }
+  };
+
+  const handleCheckout = async () => {
+    try {
+      await axios.post("/order", {}); // No body needed
+      toast.success("Order placed successfully!");
+      fetchCart(); // refresh the cart to show it's now empty
+    } catch (err) {
+      toast.error("Failed to place order.");
     }
   };
 
@@ -37,26 +47,31 @@ const CartPage = () => {
       {cart.products.length === 0 ? (
         <p>Your cart is empty.</p>
       ) : (
-        <ul className="cart-products-list">
-          {cart.products.map((item, index) => (
-            <li key={index} className="cart-product-item">
-              <img src={item.product.imageUrl} alt={item.product.name} />
-              <div className="cart-product-info">
-                <h2>{item.product.name}</h2>
-                <p>Quantity: {item.quantity}</p>
-                <p>Price: ${item.product.price}</p>
-              </div>
-              <button
-                className="remove-btn"
-                onClick={() => handleRemoveFromCart(item.product.id)}
-              >
-                Remove
-              </button>
-            </li>
-          ))}
-        </ul>
+        <>
+          <ul className="cart-products-list">
+            {cart.products.map((item, index) => (
+              <li key={index} className="cart-product-item">
+                <img src={item.product.imageUrl} alt={item.product.name} />
+                <div className="cart-product-info">
+                  <h2>{item.product.name}</h2>
+                  <p>Quantity: {item.quantity}</p>
+                  <p>Price: ${item.product.price}</p>
+                </div>
+                <button
+                  className="remove-btn"
+                  onClick={() => handleRemoveFromCart(item.product.id)}
+                >
+                  Remove
+                </button>
+              </li>
+            ))}
+          </ul>
+          <h3>Total: ${cart.totalAmount.toFixed(2)}</h3>
+          <button className="checkout-btn" onClick={handleCheckout}>
+            Checkout
+          </button>
+        </>
       )}
-      <h3>Total: ${cart.totalAmount.toFixed(2)}</h3>
     </div>
   );
 };

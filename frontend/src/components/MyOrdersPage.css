@@ -1,0 +1,19 @@
+.orders-page {
+  padding: 2rem;
+  font-family: 'Quicksand', sans-serif;
+  color: #444;
+}
+
+.order-list {
+  list-style: none;
+  padding: 0;
+}
+
+.order-card {
+  background: #ffeef5;
+  border: 2px solid #ffc8dd;
+  border-radius: 1rem;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  box-shadow: 0 2px 4px rgba(255, 182, 193, 0.3);
+}
