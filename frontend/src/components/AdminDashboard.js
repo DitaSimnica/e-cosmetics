@@ -1,17 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import api from '../utils/api';
-import './AdminDashboard.css';
+import { Pie } from 'react-chartjs-2';
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { FaRegHeart, FaUserFriends } from 'react-icons/fa';
 import { GiLipstick, GiPerfumeBottle, GiGiftOfKnowledge } from 'react-icons/gi';
 import { MdFaceRetouchingNatural } from 'react-icons/md';
 import { IoMdExit } from 'react-icons/io';
+import './AdminDashboard.css';
+
+ChartJS.register(ArcElement, Tooltip, Legend);
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
   const [userCount, setUserCount] = useState(0);
   const [productCount, setProductCount] = useState(0);
-  const [orderCount, setOrderCount] = useState(0); // ✅ New state
+  const [orderCount, setOrderCount] = useState(0);
 
   useEffect(() => {
     const token = localStorage.getItem('authToken');
@@ -57,7 +61,7 @@ const AdminDashboard = () => {
 
     fetchUsers();
     fetchProducts();
-    fetchOrders(); // ✅ Fetch orders too
+    fetchOrders();
   }, [navigate]);
 
   const handleLogout = () => {
@@ -65,54 +69,78 @@ const AdminDashboard = () => {
     navigate('/login');
   };
 
+  const data = {
+    labels: ['Products', 'Users', 'Orders'],
+    datasets: [
+      {
+        label: 'Counts',
+        data: [productCount, userCount, orderCount],
+        backgroundColor: ['#d63384', '#f77eb9', '#ffb6c1'],
+        borderColor: '#fff',
+        borderWidth: 2,
+      },
+    ],
+  };
+
+  const options = {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: 'bottom',
+        labels: { color: '#880e4f', font: { weight: '600', size: 14 } },
+      },
+      tooltip: { enabled: true },
+    },
+  };
+
   return (
-    <div className="admin-dashboard-wrapper d-flex">
-      <div className="sidebar-cute d-flex flex-column p-3">
-        <h4 className="text-center mb-4"><FaRegHeart /> Admin Panel</h4>
-        <Link className="nav-link mb-3" to="/adminDashboard/products">
-          <GiLipstick className="me-2" /> Manage Products
-        </Link>
-        <Link className="nav-link mb-3" to="/adminDashboard/users">
-          <MdFaceRetouchingNatural className="me-2" /> Manage Users
-        </Link>
-        <button className="btn btn-outline-danger mt-auto" onClick={handleLogout}>
-          <IoMdExit className="me-2" /> Logout
+    <div className="dashboard-wrapper">
+      <aside className="sidebar">
+        <h4 className="sidebar-title">
+          <FaRegHeart className="icon-pink" /> Admin Panel
+        </h4>
+        <nav className="nav-links">
+          <Link className="nav-link" to="/adminDashboard/products">
+            <GiLipstick className="icon-pink" /> Manage Products
+          </Link>
+          <Link className="nav-link" to="/adminDashboard/users">
+            <MdFaceRetouchingNatural className="icon-pink" /> Manage Users
+          </Link>
+        </nav>
+        <button className="logout-btn" onClick={handleLogout}>
+          <IoMdExit className="icon-pink" /> Logout
         </button>
-      </div>
+      </aside>
 
-      <div className="main-cute p-4 w-100">
-        <h2 className="mb-3">Welcome Admin 🌸</h2>
-        <p className="mb-4">Here's a snapshot of your dashboard:</p>
+      <main className="main-content">
+        <h2 className="welcome">Welcome Admin 🌸</h2>
+        <p className="subtitle">Here's a snapshot of your dashboard:</p>
 
-        <div className="row">
-          <div className="col-md-4 mb-4">
-            <div className="card card-cute shadow-sm">
-              <div className="card-body text-center">
-                <h5 className="card-title"><GiPerfumeBottle className="me-2" /> Total Products</h5>
-                <p className="card-text fs-4">{productCount}</p>
-              </div>
-            </div>
+        <section className="cards-grid">
+          <div className="dashboard-card">
+            <GiPerfumeBottle className="card-icon" />
+            <h4>Total Products</h4>
+            <p className="count">{productCount}</p>
           </div>
-          <div className="col-md-4 mb-4">
-            <div className="card card-cute shadow-sm">
-              <div className="card-body text-center">
-                <h5 className="card-title"><FaUserFriends className="me-2" /> Total Users</h5>
-                <p className="card-text fs-4">{userCount}</p>
-              </div>
-            </div>
+          <div className="dashboard-card">
+            <FaUserFriends className="card-icon" />
+            <h4>Total Users</h4>
+            <p className="count">{userCount}</p>
           </div>
-          <div className="col-md-4 mb-4">
-            <div className="card card-cute shadow-sm">
-              <div className="card-body text-center">
-                <h5 className="card-title"><GiGiftOfKnowledge className="me-2" /> Total Orders</h5>
-                <p className="card-text fs-4">{orderCount}</p> {/* ✅ Show order count */}
-              </div>
-            </div>
+          <div className="dashboard-card">
+            <GiGiftOfKnowledge className="card-icon" />
+            <h4>Total Orders</h4>
+            <p className="count">{orderCount}</p>
           </div>
-        </div>
+        </section>
 
-        <p className="text-muted">Use the sidebar to manage content 💅</p>
-      </div>
+        <section className="chart-wrapper">
+          <h4 className="text-center chart-title">Overview Chart</h4>
+          <Pie data={data} options={options} />
+        </section>
+
+        <p className="footer-note">Use the sidebar to manage content 💅</p>
+      </main>
     </div>
   );
 };
