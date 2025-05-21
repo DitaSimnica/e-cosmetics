@@ -5,13 +5,17 @@ import { toast } from "react-toastify";
 
 const CartPage = () => {
   const [cart, setCart] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   const fetchCart = async () => {
+    setLoading(true);
     try {
       const res = await axios.get("/cart");
       setCart(res.data);
     } catch (err) {
-      console.error("Failed to fetch cart", err);
+      toast.error("Failed to fetch cart.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -31,35 +35,35 @@ const CartPage = () => {
 
   const handleCheckout = async () => {
     try {
-      await axios.post("/order", {}); // No body needed
+      await axios.post("/order");
       toast.success("Order placed successfully!");
-      fetchCart(); // refresh the cart to show it's now empty
+      fetchCart();
     } catch (err) {
       toast.error("Failed to place order.");
     }
   };
 
-  if (!cart) return <p>Loading cart...</p>;
+  if (loading) return <div className="loading">Loading cart...</div>;
 
   return (
     <div className="cart-page">
       <h1>Your Cart</h1>
-      {cart.products.length === 0 ? (
-        <p>Your cart is empty.</p>
+      {cart?.products.length === 0 ? (
+        <p className="empty-cart-text">Your cart is empty.</p>
       ) : (
         <>
           <ul className="cart-products-list">
-            {cart.products.map((item, index) => (
+            {cart.products.map(({ product, quantity }, index) => (
               <li key={index} className="cart-product-item">
-                <img src={item.product.imageUrl} alt={item.product.name} />
+                <img src={product.imageUrl} alt={product.name} />
                 <div className="cart-product-info">
-                  <h2>{item.product.name}</h2>
-                  <p>Quantity: {item.quantity}</p>
-                  <p>Price: ${item.product.price}</p>
+                  <h2>{product.name}</h2>
+                  <p>Quantity: {quantity}</p>
+                  <p>Price: ${product.price}</p>
                 </div>
                 <button
                   className="remove-btn"
-                  onClick={() => handleRemoveFromCart(item.product.id)}
+                  onClick={() => handleRemoveFromCart(product.id)}
                 >
                   Remove
                 </button>
