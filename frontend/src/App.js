@@ -10,6 +10,7 @@ import CustomerDashboard from './components/CustomerDashboard';
 import ProductsPage from './components/ProductsPage';
 import CartPage from "./components/CartPage";
 import MyOrdersPage from './components/MyOrdersPage';
+import Home from './components/pages/Home';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -25,6 +26,7 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<WelcomeMessage />} />
+        <Route path="/home" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
 

@@ -14,7 +14,7 @@ const WelcomeMessage = () => {
     }, 2500);
 
     const navTimer = setTimeout(() => {
-      navigate('/login');
+      navigate('/home');
     }, 3000);
 
     return () => {
