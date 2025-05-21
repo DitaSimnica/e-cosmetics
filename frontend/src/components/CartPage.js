@@ -47,36 +47,41 @@ const CartPage = () => {
 
   return (
     <div className="cart-page">
-      <h1>Your Cart</h1>
+      <h1 className="cart-header">🛍️ Your Beauty Cart</h1>
       {cart?.products.length === 0 ? (
         <div className="empty-cart-message">
-          <p>🛒 Your cart is looking lonely...</p>
-          <p>Let's fill it with some beauty ✨</p>
+          <p>🛒 Your cart is empty</p>
+          <p>Add some glow ✨</p>
         </div>
       ) : (
         <>
-          <ul className="cart-products-list">
+          <div className="cart-products-container">
             {cart.products.map(({ product, quantity }, index) => (
-              <li key={index} className="cart-product-item">
+              <div key={index} className="cart-card">
                 <img src={product.imageUrl} alt={product.name} />
-                <div className="cart-product-info">
+                <div className="cart-card-details">
                   <h2>{product.name}</h2>
-                  <p>Quantity: {quantity}</p>
-                  <p>Price: ${product.price}</p>
+                  <p className="price">${product.price} × {quantity}</p>
+                  <p className="subtotal">
+                    Subtotal: ${(product.price * quantity).toFixed(2)}
+                  </p>
+                  <button
+                    className="remove-btn"
+                    onClick={() => handleRemoveFromCart(product.id)}
+                  >
+                    ❌ Remove
+                  </button>
                 </div>
-                <button
-                  className="remove-btn"
-                  onClick={() => handleRemoveFromCart(product.id)}
-                >
-                  Remove
-                </button>
-              </li>
+              </div>
             ))}
-          </ul>
-          <h3>Total: ${cart.totalAmount.toFixed(2)}</h3>
-          <button className="checkout-btn" onClick={handleCheckout}>
-            Checkout
-          </button>
+          </div>
+
+          <div className="cart-summary-box">
+            <h3>Total: ${cart.totalAmount.toFixed(2)}</h3>
+            <button className="checkout-btn" onClick={handleCheckout}>
+              Checkout 💖
+            </button>
+          </div>
         </>
       )}
     </div>
