@@ -49,7 +49,10 @@ const CartPage = () => {
     <div className="cart-page">
       <h1>Your Cart</h1>
       {cart?.products.length === 0 ? (
-        <p className="empty-cart-text">Your cart is empty.</p>
+        <div className="empty-cart-message">
+          <p>🛒 Your cart is looking lonely...</p>
+          <p>Let's fill it with some beauty ✨</p>
+        </div>
       ) : (
         <>
           <ul className="cart-products-list">

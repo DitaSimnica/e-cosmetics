@@ -133,3 +133,21 @@
     transform: translateY(0);
   }
 }
+.empty-cart-message {
+  text-align: center;
+  font-size: 1.1rem;
+  color: #be185d;
+  margin-top: 3rem;
+  animation: fadeInUp 0.5s ease-in-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
