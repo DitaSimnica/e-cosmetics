@@ -1,0 +1,55 @@
+.navbar {
+  background: rgba(255, 182, 193, 0.7); /* lighter pink */
+  padding: 10px 20px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 1px 5px rgba(255, 182, 193, 0.4);
+  font-family: 'Quicksand', sans-serif;
+}
+
+.navbar-container {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  font-family: 'Pacifico', cursive;
+  font-size: 1.6rem;
+  color: #d6336c;
+  user-select: none;
+}
+
+.nav-links {
+  list-style: none;
+  display: flex;
+  gap: 15px;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-link {
+  color: #a8325a;
+  text-decoration: none;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: 15px;
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+.nav-link:hover {
+  background-color: #d6336c;
+  color: #fff;
+}
+
+.register-btn {
+  background-color: #d6336c;
+  color: white !important;
+}
+
+.register-btn:hover {
+  background-color: #a8325a;
+}

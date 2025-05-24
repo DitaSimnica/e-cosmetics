@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { FaHeart, FaStar, FaKissWinkHeart, FaMagic } from 'react-icons/fa';
+import { FaHeart, FaMagic, FaStar } from 'react-icons/fa';
 import './WelcomeMessage.css';
 
 const WelcomeMessage = () => {
@@ -11,11 +11,11 @@ const WelcomeMessage = () => {
     const fadeTimer = setTimeout(() => {
       const el = document.querySelector('.welcome-message');
       if (el) el.style.opacity = '0';
-    }, 2500);
+    }, 2800);
 
     const navTimer = setTimeout(() => {
       navigate('/home');
-    }, 3000);
+    }, 3300);
 
     return () => {
       clearTimeout(navTimer);
@@ -26,8 +26,8 @@ const WelcomeMessage = () => {
   return (
     <motion.div
       className="welcome-message"
-      initial={{ opacity: 0, y: -50 }}
-      animate={{ opacity: 1, y: 0 }}
+      initial={{ opacity: 0, scale: 0.8 }}
+      animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 1.5, ease: 'easeOut' }}
     >
       <div className="icons">
@@ -35,8 +35,8 @@ const WelcomeMessage = () => {
         <FaMagic className="icon" />
         <FaStar className="icon" />
       </div>
-      <h1>Welcome to <span className="brand">e-Cosmetics</span>!</h1>
-      <p>Enjoy your shopping experience <FaKissWinkHeart /></p>
+      <h1>Welcome to <span className="brand">e-Cosmetics</span></h1>
+      <p>Your glow journey begins now ✨</p>
     </motion.div>
   );
 };

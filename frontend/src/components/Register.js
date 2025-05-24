@@ -43,7 +43,7 @@ function Register() {
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.8, ease: 'easeOut' }}
       >
-        <h2>Register 💖</h2>
+        <h2>Register</h2>
         {error && <p className="error">{error}</p>}
         <form onSubmit={handleRegister}>
           <input

@@ -1,32 +1,17 @@
+// src/Navbar.js
 import React from 'react';
-import { NavLink } from 'react-router-dom';
-import './Home.css';
-import { FaHome, FaSignInAlt, FaUserPlus } from 'react-icons/fa';
+import { Link } from 'react-router-dom';
+import './Navbar.css';
 
 const Navbar = () => {
   return (
     <nav className="navbar">
-      <NavLink to="/home" className="logo">e-Cosmetics</NavLink>
-
-      <div className="nav-links">
-        <NavLink
-          to="/home"
-          className={({ isActive }) => isActive ? 'active-link' : undefined}
-        >
-          <FaHome /> Home
-        </NavLink>
-        <NavLink
-          to="/login"
-          className={({ isActive }) => isActive ? 'active-link' : undefined}
-        >
-          <FaSignInAlt /> Login
-        </NavLink>
-        <NavLink
-          to="/register"
-          className={({ isActive }) => isActive ? 'active-link' : undefined}
-        >
-          <FaUserPlus /> Register
-        </NavLink>
+      <div className="container navbar-container">
+        <div className="logo">E-Cosmetics</div>
+        <ul className="nav-links">
+          <li><a href="/login" className="nav-link">Login</a></li>
+          <li><a href="/register" className="nav-link btn-register">Register</a></li>
+        </ul>
       </div>
     </nav>
   );

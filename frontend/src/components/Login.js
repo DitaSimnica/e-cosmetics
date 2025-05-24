@@ -40,6 +40,11 @@ function Login() {
 
   return (
     <div className="login-container">
+      {/* Floating Hearts */}
+      <div className="floating-heart">💗</div>
+      <div className="floating-heart">💕</div>
+      <div className="floating-heart">💖</div>
+
       <motion.div
         className="login-form"
         initial={{ opacity: 0, scale: 0.9 }}
@@ -47,7 +52,7 @@ function Login() {
         transition={{ duration: 0.8, ease: 'easeOut' }}
       >
         <FaHeart className="login-icon" />
-        <h2>Login 💕</h2>
+        <h2>Login</h2>
 
         {error && <p className="error-text">{error}</p>}
 

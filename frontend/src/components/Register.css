@@ -3,22 +3,30 @@
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background: linear-gradient(to right, #ffe6f0, #ffc6e0);
+  /* Animated pastel gradient background (same as html, body) */
+  background: linear-gradient(135deg, var(--mint-green), var(--soft-pink), #ffdcf5, #f2f4c3);
+  background-size: 400% 400%;
+  animation: gradientShift 12s ease infinite;
+
+  font-family: 'Quicksand', sans-serif;
 }
 
 .register-form {
-  background-color: #fff0f5;
+  background-color: var(--creamy-white);
   padding: 3rem 2rem;
   border-radius: 1.5rem;
-  box-shadow: 0 4px 12px rgba(255, 182, 193, 0.3);
+  box-shadow: 0 4px 12px rgba(246, 166, 178, 0.3);
   width: 350px;
   text-align: center;
+  color: var(--text-highlight);
 }
 
 .register-form h2 {
   font-size: 2rem;
-  color: #ff69b4;
+  color: var(--peachy-coral);
   margin-bottom: 1.5rem;
+  font-family: 'Pacifico', cursive;
+  text-shadow: 1px 1px var(--soft-pink);
 }
 
 .register-form form input,
@@ -26,47 +34,61 @@
   width: 100%;
   padding: 10px;
   margin-bottom: 1rem;
-  border: 1px solid #ffb6c1;
+  border: 1px solid var(--blush-pink);
   border-radius: 10px;
   outline: none;
   font-size: 1rem;
+  font-family: 'Quicksand', sans-serif;
+  color: var(--text-dark);
+  transition: border-color 0.3s ease;
+}
+
+.register-form form input:focus,
+.register-form form select:focus {
+  border-color: var(--peachy-coral);
+  box-shadow: 0 0 8px var(--peachy-coral);
 }
 
 .register-form button {
   width: 100%;
   padding: 10px;
-  background-color: #ff69b4;
+  background-color: var(--blush-pink);
   color: white;
   border: none;
   border-radius: 10px;
   cursor: pointer;
   font-size: 1.1rem;
-  transition: background-color 0.3s ease;
+  font-family: 'Quicksand', sans-serif;
+  box-shadow: 0 4px 10px rgba(246, 166, 178, 0.4);
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .register-form button:hover {
-  background-color: #ff85c1;
+  background-color: var(--peachy-coral);
+  box-shadow: 0 6px 15px rgba(255, 111, 97, 0.6);
 }
 
 .login-link {
   margin-top: 1rem;
   font-size: 1rem;
-  color: #ff69b4;
+  color: var(--blush-pink);
+  font-family: 'Quicksand', sans-serif;
 }
 
 .login-link-text {
-  color: #ff1493;
+  color: var(--text-highlight);
   font-weight: bold;
   text-decoration: none;
   transition: color 0.3s ease;
 }
 
 .login-link-text:hover {
-  color: #ff69b4;
+  color: var(--peachy-coral);
   text-decoration: underline;
 }
 
 .error {
-  color: #ff4d4f;
+  color: #ff4d4f; /* This red is fine for error */
   margin-bottom: 1rem;
+  font-family: 'Quicksand', sans-serif;
 }

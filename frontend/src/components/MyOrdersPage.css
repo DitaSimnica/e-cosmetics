@@ -1,7 +1,9 @@
 .orders-page {
   padding: 2rem;
   font-family: 'Quicksand', sans-serif;
-  color: #444;
+  color: var(--text-dark);
+  background: linear-gradient(135deg, var(--mint-green), var(--soft-pink), #ffdcf5, #f2f4c3);
+  min-height: 100vh;
 }
 
 .order-list {
@@ -10,10 +12,30 @@
 }
 
 .order-card {
-  background: #ffeef5;
-  border: 2px solid #ffc8dd;
+  background: var(--creamy-white);
+  border: 2px solid var(--blush-pink);
   border-radius: 1rem;
   padding: 1rem;
   margin-bottom: 1rem;
-  box-shadow: 0 2px 4px rgba(255, 182, 193, 0.3);
+  box-shadow: 0 2px 4px rgba(246, 166, 178, 0.3); /* blush pink shadow */
+  color: var(--text-highlight);
+  transition: box-shadow 0.3s ease;
+}
+
+.order-card:hover {
+  box-shadow: 0 4px 8px rgba(246, 166, 178, 0.5);
+  border-color: var(--peachy-coral);
+}
+
+/* Optional: style order headers and details */
+.order-card h3 {
+  margin: 0 0 0.5rem;
+  color: var(--peachy-coral);
+  font-weight: 600;
+}
+
+.order-card p {
+  margin: 0.2rem 0;
+  color: var(--text-muted);
+  font-weight: 500;
 }

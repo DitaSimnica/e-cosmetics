@@ -1,84 +1,154 @@
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&display=swap');
+
+:root {
+  /* From your first palette */
+  --soft-pink: #FADADD;
+  --blush-pink: #F6A6B2;
+  --peachy-coral: #FF6F61;
+  --mint-green: #C6E7D9;
+  --creamy-white: #FFF8F0;
+  --warm-gray: #B8A9A6;
+
+  --text-dark: #333333;
+  --text-muted: #84406a;
+  --text-highlight: #a8325a;
+
+  /* Original variables from second CSS, renamed */
+  --first-color: var(--mint-green);
+  --second-color: var(--blush-pink);
+  --third-color: var(--soft-pink);
+  --fourth-color: var(--creamy-white);
+  --accent-color: var(--peachy-coral);
+  --text-color: var(--text-highlight);
+}
+
+body {
+  margin: 0;
+  font-family: 'Quicksand', sans-serif;
+  background: radial-gradient(circle at top left, var(--first-color), var(--second-color), var(--third-color), var(--fourth-color));
+  overflow: hidden;
+}
+
+/* 💫 Dashboard Wrapper */
 .customer-dashboard-wrapper {
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background: linear-gradient(to bottom right, #fff0f5, #ffe4ec);
-  font-family: 'Quicksand', sans-serif;
   padding: 1rem;
+  background: radial-gradient(ellipse at bottom right, var(--third-color), var(--second-color), var(--first-color));
 }
 
+/* 🩷 Loading Text */
 .loading-text {
-  font-size: 1.2rem;
-  color: #c2185b;
+  font-size: 1.4rem;
+  color: var(--accent-color);
   text-align: center;
+  font-weight: bold;
   font-family: 'Quicksand', sans-serif;
 }
 
+/* 🌟 Dashboard Box */
 .dashboard-box {
-  background-color: #fff;
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(14px);
   padding: 3rem;
-  border-radius: 25px;
-  box-shadow: 0 8px 16px rgba(255, 182, 193, 0.25);
+  border-radius: 30px;
+  box-shadow: 0 8px 24px rgba(246, 166, 178, 0.35); /* blush pink shadow */
   text-align: center;
   max-width: 500px;
   width: 100%;
+  border: 2px solid var(--second-color);
+  position: relative;
+  z-index: 2;
+  animation: fadeSlideIn 0.8s ease-out both;
+}
+
+@keyframes fadeSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .dashboard-box h2 {
-  color: #d63384;
-  margin-bottom: 0.5rem;
-  font-size: 2rem;
-  text-shadow: 1px 1px #ffe4ec;
+  color: var(--accent-color);
+  margin-bottom: 0.6rem;
+  font-size: 2.2rem;
+  text-shadow: 1px 1px #fff0f5;
 }
 
 .dashboard-box p {
-  color: #6b0f1a;
+  color: var(--text-color);
   margin-bottom: 2rem;
-  font-size: 1.1rem;
+  font-size: 1.15rem;
 }
 
+/* 🎀 Buttons */
 .actions .btn {
   display: block;
   width: 100%;
   margin-bottom: 1rem;
-  padding: 12px;
+  padding: 13px;
   border: none;
-  border-radius: 12px;
+  border-radius: 14px;
   font-weight: bold;
   font-size: 1rem;
   transition: all 0.3s ease;
   cursor: pointer;
   transform: scale(1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
 .actions .btn:hover {
   transform: scale(1.05);
 }
 
+/* 🛍️ Shop */
 .btn-shop {
-  background-color: #ffb6c1;
-  color: white;
+  background-color: var(--second-color);
+  color: var(--text-color);
 }
 
 .btn-shop:hover {
-  background-color: #ff99b9;
+  background-color: #fcaeff; /* lighter blush pink */
 }
 
+/* 📦 Orders */
 .btn-orders {
-  background-color: #ffd6e8;
-  color: #880e4f;
+  background-color: var(--third-color);
+  color: #5c0a3d;
 }
 
 .btn-orders:hover {
-  background-color: #ffcce0;
+  background-color: #ffcaec;
 }
 
+/* 🚪 Logout */
 .btn-logout {
-  background-color: #f8d7da;
-  color: #721c24;
+  background-color: var(--fourth-color);
+  color: var(--warm-gray);
 }
 
 .btn-logout:hover {
-  background-color: #f1b0b7;
+  background-color: #eaeeb2;
+}
+
+/* 🌈 Responsive */
+@media screen and (max-width: 480px) {
+  .dashboard-box {
+    padding: 2rem;
+  }
+
+  .dashboard-box h2 {
+    font-size: 1.8rem;
+  }
+
+  .dashboard-box p {
+    font-size: 1rem;
+  }
 }

@@ -1,33 +1,93 @@
 @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&display=swap');
 
-body {
-  margin: 0;
-  font-family: 'Quicksand', sans-serif;
-  background: linear-gradient(135deg, #ffc0cb, #ffe4e1, #ffb6c1);
-  height: 100vh;
-  overflow: hidden;
-  position: relative;
+/* === Color Palette Variables === */
+:root {
+  /* Cute & Girly Palette from your second snippet */
+  --soft-pink: #FADADD;
+  --blush-pink: #F6A6B2;
+  --peachy-coral: #FF6F61;
+  --mint-green: #C6E7D9;
+  --creamy-white: #FFF8F0;
+  --warm-gray: #B8A9A6;
+  
+  /* Text colors */
+  --text-dark: #333333;
+  --text-muted: #84406a;
+  --text-highlight: #a8325a;
+
+  /* Also keep your first snippet’s colors for accents and backgrounds */
+  --first-color: #c7f3ff;   /* Soft Aqua */
+  --second-color: #fdc7ff;  /* Cotton Candy */
+  --third-color: #ffdcf5;   /* Blush Pink */
+  --fourth-color: #f2f4c3;  /* Pastel Lemon */
+  --accent-color: #ff69b4;  /* Hot Pink */
+  --dark-text: #5e005e;
 }
 
-/* Shimmer overlay */
+/* === Global Reset & Base === */
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow-y: auto; /* Always allow vertical scroll */
+  font-family: 'Quicksand', sans-serif;
+
+  /* Use the animated pastel gradient background from second snippet */
+  background: linear-gradient(135deg, var(--mint-green), var(--soft-pink), #ffdcf5, #f2f4c3);
+  background-size: 400% 400%;
+  animation: gradientShift 12s ease infinite;
+  color: var(--text-dark);
+  position: relative;
+  min-height: 100vh;
+}
+
+/* Gradient animation keyframes */
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* === Sparkle overlay from first snippet */
 body::after {
   content: '';
   position: absolute;
   top: 0; left: 0;
   width: 100%; height: 100%;
-  background-image: radial-gradient(#fff7f9 1px, transparent 1px);
-  background-size: 20px 20px;
-  opacity: 0.25;
-  animation: shimmer 5s linear infinite;
+  background-image: radial-gradient(#ffffff55 1px, transparent 1px);
+  background-size: 25px 25px;
+  opacity: 0.15;
+  animation: shimmer 8s linear infinite;
   pointer-events: none;
   z-index: 1;
 }
 
 @keyframes shimmer {
-  from { background-position: 0 0; }
-  to { background-position: 100% 100%; }
+  0% { background-position: 0 0; }
+  100% { background-position: 100% 100%; }
 }
 
+/* ❤️ Floating Hearts */
+.floating-heart {
+  position: absolute;
+  bottom: -30px;
+  font-size: 1.5rem;
+  color: var(--second-color);
+  animation: heartFloat 10s ease-in-out infinite;
+  z-index: 0;
+  opacity: 0.8;
+}
+
+.floating-heart:nth-child(1) { left: 10%; animation-delay: 0s; }
+.floating-heart:nth-child(2) { left: 45%; animation-delay: 2s; }
+.floating-heart:nth-child(3) { left: 75%; animation-delay: 4s; }
+
+@keyframes heartFloat {
+  0% { transform: translateY(0) scale(1); opacity: 0.8; }
+  100% { transform: translateY(-200px) scale(1.4); opacity: 0; }
+}
+
+/* 🧁 Login Form Container */
 .login-container {
   display: flex;
   justify-content: center;
@@ -35,23 +95,32 @@ body::after {
   height: 100vh;
   z-index: 2;
   position: relative;
+  padding: 1rem;
 }
 
 .login-form {
-  background-color: #fff0f8;
+  background: rgba(255, 255, 255, 0.6);
+  border: 2px solid var(--blush-pink); /* Use blush pink from second palette */
+  backdrop-filter: blur(20px);
   padding: 2rem;
   border-radius: 20px;
-  box-shadow: 0 8px 25px rgba(255, 105, 180, 0.4);
-  width: 340px;
+  box-shadow: 0 10px 30px rgba(246, 166, 178, 0.35); /* soft shadow with second snippet colors */
+  width: 360px;
   text-align: center;
   position: relative;
-  backdrop-filter: blur(10px);
+  z-index: 3;
+  transition: transform 0.3s ease;
 }
 
+.login-form:hover {
+  transform: scale(1.01);
+}
+
+/* 🧸 Icon + Title */
 .login-icon {
-  font-size: 2rem;
-  color: #ff69b4;
-  margin-bottom: 0.5rem;
+  font-size: 2.5rem;
+  color: var(--blush-pink);
+  margin-bottom: 0.75rem;
   animation: float 3s ease-in-out infinite;
 }
 
@@ -61,71 +130,93 @@ body::after {
 }
 
 .login-form h2 {
-  color: #ff69b4;
-  margin-bottom: 1rem;
+  color: var(--peachy-coral);
   font-size: 2rem;
+  margin-bottom: 1rem;
 }
 
+/* 🎀 Input Fields */
 .login-form input {
   width: 100%;
   padding: 0.75rem;
-  margin: 0.5rem 0;
-  border: 2px solid #ffb6c1;
+  margin: 0.6rem 0;
+  border: 2px solid var(--blush-pink);
   border-radius: 12px;
-  outline: none;
   font-size: 1rem;
-  background-color: #fff;
-  transition: 0.3s ease;
+  background-color: #ffffffdd;
+  transition: 0.3s;
 }
 
 .login-form input:focus {
-  border-color: #ff69b4;
-  box-shadow: 0 0 10px rgba(255, 105, 180, 0.4);
+  border-color: var(--peachy-coral);
+  box-shadow: 0 0 10px rgba(255, 111, 97, 0.6); /* peachy coral glow */
+  outline: none;
 }
 
+/* 🍬 Button */
 .login-form button {
   width: 100%;
-  padding: 0.75rem;
-  background-color: #ff69b4;
-  color: white;
+  padding: 0.8rem;
+  background-color: var(--blush-pink);
+  color: var(--text-dark);
   font-weight: bold;
   border: none;
   border-radius: 12px;
   margin-top: 1rem;
-  cursor: pointer;
+  font-size: 1.05rem;
   transition: background-color 0.3s ease, transform 0.2s;
+  cursor: pointer;
 }
 
 .login-form button:hover {
-  background-color: #ff1493;
+  background-color: var(--peachy-coral);
+  color: white;
   transform: scale(1.03);
 }
 
 .login-form button:disabled {
-  background-color: #ffb6c1;
+  background-color: #e4d2e9;
   cursor: not-allowed;
 }
 
+/* 💖 Error Message */
 .error-text {
   color: #d1005b;
   margin-bottom: 0.5rem;
   font-weight: bold;
 }
 
+/* 🪞 Register Link */
 .register-link {
   margin-top: 1rem;
-  font-size: 1rem;
-  color: #ff69b4;
+  font-size: 0.95rem;
+  color: var(--text-dark);
 }
 
 .register-link-text {
-  color: #ff1493;
+  color: var(--peachy-coral);
   font-weight: bold;
   text-decoration: none;
   transition: color 0.3s ease;
 }
 
 .register-link-text:hover {
-  color: #ff69b4;
+  color: var(--text-dark);
   text-decoration: underline;
+}
+
+/* 📱 Responsive Design */
+@media screen and (max-width: 480px) {
+  .login-form {
+    width: 100%;
+    padding: 1.5rem;
+  }
+
+  .login-form h2 {
+    font-size: 1.6rem;
+  }
+
+  .login-form button {
+    font-size: 1rem;
+  }
 }

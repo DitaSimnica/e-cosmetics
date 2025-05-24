@@ -1,15 +1,46 @@
 @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&display=swap');
 
+:root {
+  /* Colors from your .register-container */
+  --mint-green: #a7d7c5;           /* mint green from gradient */
+  --soft-pink: #ffdcf5;            /* soft pastel pink */
+  --blush-pink: #f6a6b2;           /* blush pink from box-shadow and button */
+  --peachy-coral: #ff6f61;         /* peachy coral from heading and hover */
+  --creamy-white: #fff9f8;          /* creamy white for form background */
+  --text-highlight: #5e004d;       /* dark pink-ish text */
+  --text-dark: #4a0033;            /* dark pink text */
+  
+  /* Additional colors to keep your original scheme */
+  --pink-light: #fff0f5;              /* light pastel pink fallback */
+  --pink-soft: rgba(255, 220, 245, 0.65);
+  --pink-soft-hover: rgba(255, 220, 245, 0.8);
+  --pink-medium: #c36d96;
+  --pink-strong: #ffdcf5;
+  --pink-dark: #9c136f;
+  --pink-darker: #7a2048;
+  --pink-text-dark: #4a0033;
+  --pink-gradient1: #fdc7ff;
+  --pink-gradient2: #f7a7f9;
+
+  --blue-light: #c7f3ff;
+  --blue-shadow: rgba(199, 243, 255, 0.3);
+  --pink-shadow-light: rgba(253, 199, 255, 0.25);
+  --pink-shadow-hover: rgba(247, 167, 249, 0.3);
+  --pink-shadow-hover-strong: rgba(247, 167, 249, 0.45);
+  --pink-shadow-hover-inset: rgba(247, 167, 249, 0.25);
+  --pink-shadow-hover-stronger: rgba(247, 167, 249, 0.7);
+}
+
 * {
   box-sizing: border-box;
 }
 
 body {
   font-family: 'Quicksand', sans-serif;
-  background: linear-gradient(135deg, #ffe6f9 0%, #fff0f5 100%);
+  background: linear-gradient(135deg, var(--mint-green) 0%, var(--soft-pink) 33%, #ffdcf5 66%, #f2f4c3 100%);
   margin: 0;
   padding: 0;
-  color: #4a0033;
+  color: var(--text-highlight);
 }
 
 .dashboard-wrapper {
@@ -22,10 +53,10 @@ body {
 /* Sidebar with glassmorphism */
 .sidebar {
   width: 260px;
-  background: rgba(255, 255, 255, 0.65);
+  background: var(--soft-pink);
   backdrop-filter: saturate(180%) blur(16px);
   -webkit-backdrop-filter: saturate(180%) blur(16px);
-  box-shadow: 4px 0 20px rgba(255, 182, 193, 0.25);
+  box-shadow: 4px 0 20px var(--pink-shadow-light);
   border-radius: 0 30px 30px 0;
   display: flex;
   flex-direction: column;
@@ -35,11 +66,11 @@ body {
 }
 
 .sidebar:hover {
-  background: rgba(255, 255, 255, 0.8);
+  background: var(--pink-soft-hover);
 }
 
 .sidebar-title {
-  color: #d63384;
+  color: var(--blush-pink);
   font-weight: 700;
   font-size: 1.8rem;
   text-align: center;
@@ -47,7 +78,7 @@ body {
 }
 
 .icon-pink {
-  color: #d63384;
+  color: var(--blush-pink);
   vertical-align: middle;
   margin-right: 8px;
   font-size: 1.3rem;
@@ -63,26 +94,26 @@ body {
 .nav-link {
   font-weight: 600;
   font-size: 1.15rem;
-  color: #9c136f;
-  background: #ffe6f2;
+  color: var(--blush-pink);
+  background: var(--mint-green);
   border-radius: 14px;
   padding: 12px 18px;
   text-decoration: none;
   display: flex;
   align-items: center;
   transition: all 0.25s ease;
-  box-shadow: 0 2px 6px rgba(255, 182, 193, 0.3);
+  box-shadow: 0 2px 6px rgba(246, 166, 178, 0.3);
   user-select: none;
 }
 
 .nav-link:hover {
-  background: #fbd6e3;
+  background: var(--peachy-coral);
   padding-left: 26px;
-  box-shadow: 0 5px 15px rgba(255, 105, 180, 0.3);
+  box-shadow: 0 5px 15px rgba(255, 111, 97, 0.6);
 }
 
 .logout-btn {
-  background: linear-gradient(135deg, #ffb6c1, #ff99bb);
+  background: linear-gradient(135deg, var(--peachy-coral), var(--blush-pink));
   border: none;
   color: white;
   font-weight: 700;
@@ -95,28 +126,29 @@ body {
   align-items: center;
   justify-content: center;
   gap: 8px;
-  box-shadow: 0 4px 15px rgba(255, 105, 180, 0.5);
+  box-shadow: 0 4px 15px rgba(246, 166, 178, 0.4);
   margin-top: auto;
 }
 
 .logout-btn:hover {
-  background: linear-gradient(135deg, #ff8aad, #ff779b);
-  box-shadow: 0 6px 20px rgba(255, 105, 180, 0.7);
+  background: linear-gradient(135deg, var(--blush-pink), var(--peachy-coral));
+  box-shadow: 0 6px 20px rgba(255, 111, 97, 0.6);
 }
 
 /* Main content with soft card style */
 .main-content {
   flex-grow: 1;
-  background: white;
+  background: var(--creamy-white);
   margin: 20px 30px 20px 0;
   border-radius: 30px;
-  box-shadow: 0 12px 35px rgba(255, 182, 193, 0.2);
+  box-shadow: 0 4px 12px rgba(246, 166, 178, 0.3);
   padding: 3rem 3.5rem;
   display: flex;
   flex-direction: column;
   animation: fadeInUp 0.8s ease;
   overflow-y: auto;
   user-select: none;
+  color: var(--text-highlight);
 }
 
 @keyframes fadeInUp {
@@ -131,14 +163,16 @@ body {
 }
 
 .welcome {
-  color: #d63384;
+  color: var(--peachy-coral);
   font-weight: 700;
   font-size: 2.8rem;
   margin-bottom: 0.2rem;
+  font-family: 'Pacifico', cursive;
+  text-shadow: 1px 1px var(--soft-pink);
 }
 
 .subtitle {
-  color: #7a2048;
+  color: var(--blush-pink);
   font-weight: 600;
   margin-bottom: 2.5rem;
   font-size: 1.2rem;
@@ -154,13 +188,13 @@ body {
 }
 
 .dashboard-card {
-  background: linear-gradient(135deg, #fff0f5, #ffe6f9);
+  background: linear-gradient(135deg, var(--mint-green), var(--soft-pink));
   border-radius: 25px;
   padding: 2.2rem 2.8rem;
   width: 280px;
   box-shadow:
-    0 10px 20px rgba(255, 182, 193, 0.3),
-    inset 0 0 15px rgba(255, 182, 193, 0.15);
+    0 10px 20px rgba(246, 166, 178, 0.3),
+    inset 0 0 15px rgba(246, 166, 178, 0.2);
   text-align: center;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   cursor: default;
@@ -169,19 +203,19 @@ body {
 .dashboard-card:hover {
   transform: translateY(-8px);
   box-shadow:
-    0 18px 40px rgba(255, 105, 180, 0.45),
-    inset 0 0 25px rgba(255, 105, 180, 0.25);
+    0 18px 40px var(--peachy-coral),
+    inset 0 0 25px rgba(255, 111, 97, 0.3);
 }
 
 .card-icon {
-  color: #d63384;
+  color: var(--peachy-coral);
   font-size: 3.6rem;
   margin-bottom: 1rem;
 }
 
 .dashboard-card h4 {
   font-weight: 700;
-  color: #9c136f;
+  color: var(--blush-pink);
   margin-bottom: 0.6rem;
   font-size: 1.4rem;
 }
@@ -189,17 +223,17 @@ body {
 .count {
   font-weight: 700;
   font-size: 2.5rem;
-  color: #d63384;
+  color: var(--peachy-coral);
   letter-spacing: 0.05em;
 }
 
 /* Chart section */
 .chart-wrapper {
   margin-top: 3.5rem;
-  background: #fff0f5;
+  background: var(--mint-green);
   border-radius: 25px;
   padding: 2.5rem 3rem;
-  box-shadow: 0 8px 30px rgba(255, 182, 193, 0.3);
+  box-shadow: 0 8px 30px rgba(246, 166, 178, 0.2);
   max-width: 650px;
   margin-left: auto;
   margin-right: auto;
@@ -208,7 +242,7 @@ body {
 
 .chart-title {
   font-weight: 700;
-  color: #9c136f;
+  color: var(--blush-pink);
   margin-bottom: 1.8rem;
   text-align: center;
   font-size: 1.5rem;
@@ -223,7 +257,7 @@ body {
   margin-top: 3.5rem;
   font-style: italic;
   font-weight: 600;
-  color: #a3355a;
+  color: var(--peachy-coral);
   text-align: center;
   user-select: none;
 }

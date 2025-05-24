@@ -2,9 +2,10 @@
 
 body {
   font-family: 'Quicksand', sans-serif;
-  background-color: #fff6f9;
+  background: linear-gradient(135deg, #ffe6f9 0%, #fff0f5 100%);
   margin: 0;
   padding: 0;
+  color: #4a0033; /* matching text color */
 }
 
 /* Main container */
@@ -12,9 +13,11 @@ body {
   max-width: 900px;
   margin: 40px auto;
   padding: 20px;
-  background-color: #fff0f8;
+  background: linear-gradient(135deg, #fff0f5, #ffe6f9);
   border-radius: 20px;
-  box-shadow: 0 6px 16px rgba(255, 182, 193, 0.3);
+  box-shadow:
+    0 6px 16px rgba(255, 182, 193, 0.3),
+    inset 0 0 15px rgba(255, 182, 193, 0.15);
 }
 
 /* Heading */
@@ -27,24 +30,28 @@ h2 {
 
 /* Pink button */
 .btn-pink {
-  background-color: #ffb6c1;
+  background: linear-gradient(135deg, #ffb6c1, #ff99bb);
   border: none;
   color: white;
   font-weight: bold;
   padding: 10px 20px;
   border-radius: 10px;
-  transition: background-color 0.3s ease;
+  transition: background 0.3s ease;
+  box-shadow: 0 4px 15px rgba(255, 105, 180, 0.5);
 }
 
 .btn-pink:hover {
-  background-color: #ff91ac;
+  background: linear-gradient(135deg, #ff8aad, #ff779b);
+  box-shadow: 0 6px 20px rgba(255, 105, 180, 0.7);
 }
 
 /* Card container for form */
 .card {
-  background-color: #ffe4ec;
+  background: linear-gradient(135deg, #ffe6f9, #fff0f5);
   border-radius: 15px;
-  box-shadow: 0 4px 10px rgba(255, 192, 203, 0.2);
+  box-shadow:
+    0 4px 10px rgba(255, 182, 193, 0.2),
+    inset 0 0 15px rgba(255, 182, 193, 0.15);
 }
 
 /* Form fields */
@@ -54,25 +61,34 @@ h2 {
   padding: 10px;
   font-size: 1rem;
   margin-bottom: 10px;
+  transition: border-color 0.3s ease;
 }
 
+.form-control:focus {
+  border-color: #d63384;
+  outline: none;
+}
+
+/* Success button */
 button.btn-success {
-  background-color: #d85d93;
+  background: linear-gradient(135deg, #d85d93, #c94d85);
   border: none;
   color: white;
   font-weight: bold;
   padding: 10px 20px;
   border-radius: 10px;
-  transition: background-color 0.3s ease;
+  transition: background 0.3s ease;
+  box-shadow: 0 4px 15px rgba(217, 77, 133, 0.5);
 }
 
 button.btn-success:hover {
-  background-color: #c94d85;
+  background: linear-gradient(135deg, #c94d85, #b14375);
+  box-shadow: 0 6px 20px rgba(201, 66, 122, 0.7);
 }
 
 /* Product List Items */
 .cute-list .list-group-item {
-  background-color: #fff6f9;
+  background: linear-gradient(135deg, #fff0f5, #ffe6f9);
   border: 1px solid #ffddee;
   border-radius: 12px;
   margin-bottom: 12px;
@@ -82,6 +98,7 @@ button.btn-success:hover {
   align-items: center;
   padding: 15px;
   flex-wrap: wrap;
+  box-shadow: 0 2px 8px rgba(255, 182, 193, 0.15);
 }
 
 /* Image Styling */
@@ -106,6 +123,7 @@ button.btn-success:hover {
   background-color: #ffdd99;
   color: #5c2a00;
   border: none;
+  box-shadow: 0 2px 8px rgba(255, 204, 102, 0.3);
 }
 
 .cute-list .btn-warning:hover {
@@ -117,6 +135,7 @@ button.btn-success:hover {
   background-color: #ff7f7f;
   color: white;
   border: none;
+  box-shadow: 0 2px 8px rgba(255, 77, 77, 0.3);
 }
 
 .cute-list .btn-danger:hover {

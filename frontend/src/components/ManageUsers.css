@@ -1,33 +1,33 @@
 .table-cute-wrapper {
   overflow-x: auto;
   border-radius: 16px;
-  box-shadow: 0 6px 16px rgba(255, 182, 193, 0.2);
+  box-shadow: 0 6px 16px rgba(255, 182, 193, 0.2); /* Could use --pink-soft or --pink-shadow-light */
 }
 
 .table-cute {
   width: 100%;
   border-collapse: collapse;
-  background-color: #fff0f8;
+  background-color: var(--pink-light); /* #fff0f5 */
   border-radius: 16px;
   overflow: hidden;
   font-size: 1rem;
-  box-shadow: 0 4px 12px rgba(255, 182, 193, 0.2);
+  box-shadow: 0 4px 12px var(--pink-shadow-light);
 }
 
 .table-cute th,
 .table-cute td {
   padding: 14px 20px;
   text-align: left;
-  border-bottom: 1px solid #ffd6e8;
+  border-bottom: 1px solid var(--pink-strong); /* #ffdcf5 */
 }
 
 .table-cute thead {
-  background-color: #ffb6c1;
+  background-color: var(--blush-pink); /* #f6a6b2 */
   color: white;
 }
 
 .table-cute tbody tr:hover {
-  background-color: #ffe4ec;
+  background-color: var(--pink-soft-hover); /* rgba(255, 220, 245, 0.8) */
   transition: background-color 0.3s;
 }
 
@@ -37,8 +37,8 @@
 
 .badge-cute {
   display: inline-block;
-  background-color: #ffd6e8;
-  color: #9c136f;
+  background-color: var(--pink-strong); /* #ffdcf5 */
+  color: var(--pink-dark); /* #9c136f */
   padding: 5px 10px;
   font-size: 0.9rem;
   border-radius: 12px;
@@ -49,13 +49,13 @@
   padding: 40px 20px;
   margin: 30px auto;
   max-width: 1000px;
-  background-color: #fff0f8;
+  background-color: var(--pink-light); /* #fff0f5 */
   border-radius: 20px;
-  box-shadow: 0 6px 18px rgba(255, 192, 203, 0.3);
+  box-shadow: 0 6px 18px var(--pink-shadow-hover);
 }
 
 .page-title {
-  color: #d63384;
+  color: var(--pink-dark); /* #9c136f */
   font-size: 2rem;
   font-weight: 700;
   margin-bottom: 1.5rem;
@@ -75,21 +75,21 @@
 }
 
 .btn-edit {
-  background-color: #ffc5e6;
-  color: #7c136f;
+  background-color: var(--pink-strong); /* #ffdcf5 */
+  color: var(--pink-darker); /* #7a2048 */
 }
 
 .btn-edit:hover {
-  background-color: #ffaad4;
+  background-color: var(--pink-gradient2); /* #f7a7f9 */
 }
 
 .btn-delete {
-  background-color: #f8d7da;
-  color: #a0002c;
+  background-color: var(--pink-soft); /* rgba(255, 220, 245, 0.65) */
+  color: var(--pink-dark); /* #9c136f */
 }
 
 .btn-delete:hover {
-  background-color: #f1aeb5;
+  background-color: var(--pink-gradient1); /* #fdc7ff */
 }
 
 .text-center {

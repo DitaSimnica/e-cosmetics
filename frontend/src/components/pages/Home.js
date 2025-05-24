@@ -1,56 +1,61 @@
 import React from 'react';
-import Navbar from '../Navbar';
-import HeroSection from '../HeroSection';
-import FeaturesSection from '../FeaturesSection';
-import AboutSection from '../AboutSection';
-import CTASection from '../CTASection';
-import Footer from '../Footer';
+import { Link } from 'react-router-dom';
 import '../Home.css';
-import ProductSlider from '../ProductSlider';
-
-const Divider = ({ flip }) => (
-  <div className={`divider ${flip ? 'flip' : ''}`}>
-    <svg viewBox="0 0 1440 100" preserveAspectRatio="none">
-      <path
-        d="M0,0 C480,100 960,0 1440,100 L1440,0 L0,0 Z"
-        fill="#ffe4e1"
-      />
-    </svg>
-  </div>
-);
 
 const Home = () => {
   return (
-    <>
-      <Navbar />
-
-<section className="product-slider-section">
-  <ProductSlider />
-</section>
+    <div className="home">
+      {/* 🌸 Hero Section */}
       <section className="hero-section">
-        <HeroSection />
+        <div className="container">
+          <h1>Welcome to E-Cosmetics</h1>
+          <p>Your beauty, your rules — all in one adorable place 💖</p>
+          <div className="hero-buttons">
+            <Link to="/login" className="btn btn-login">Login</Link>
+            <Link to="/register" className="btn btn-register">Register</Link>
+          </div>
+        </div>
       </section>
 
-      <Divider />
-
+      {/* ✨ Features Section */}
       <section className="features-section">
-        <FeaturesSection />
+        <div className="container">
+          <h2>Why You'll Love Us</h2>
+          <div className="row mt-4 text-center">
+            {[
+              { icon: '🌷', text: 'Handpicked Korean skincare & makeup' },
+              { icon: '🎁', text: 'Cute packaging with every order' },
+              { icon: '💌', text: 'Personalized beauty recommendations' }
+            ].map(({ icon, text }, idx) => (
+              <div key={idx} className="col-md-4 feature-item p-3">
+                <div className="feature-icon">{icon}</div>
+                <p>{text}</p>
+              </div>
+            ))}
+          </div>
+        </div>
       </section>
 
-      <Divider flip />
-
+      {/* 💕 About Section */}
       <section className="about-section">
-        <AboutSection />
+        <div className="container text-center">
+          <h2>About Us</h2>
+          <p className="about-text">
+            We’re a small team of beauty lovers committed to bringing you the most effective and adorable products.<br />
+            Our mission is to make skincare fun, affordable, and confidence-boosting 🌼
+          </p>
+        </div>
       </section>
 
-      <Divider />
-
+      {/* 💫 CTA Section */}
       <section className="cta-section">
-        <CTASection />
+        <div className="container">
+          <h2>Start Your Glow-Up ✨</h2>
+          <p>Sign up and get 10% off your first purchase!</p>
+          <button className="btn btn-join">Join Now</button>
+        </div>
       </section>
-
-      <Footer />
-    </>
+    </div>
   );
 };
 
