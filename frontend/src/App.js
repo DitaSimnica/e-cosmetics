@@ -11,6 +11,8 @@ import ProductsPage from './components/ProductsPage';
 import CartPage from "./components/CartPage";
 import MyOrdersPage from './components/MyOrdersPage';
 import Home from './components/pages/Home';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'animate.css';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
