@@ -2,29 +2,25 @@
 
 /* === Color Palette Variables === */
 :root {
-  /* Cute & Girly Palette */
   --soft-pink: #FADADD;
   --blush-pink: #F6A6B2;
   --peachy-coral: #FF6F61;
   --mint-green: #C6E7D9;
   --creamy-white: #FFF8F0;
   --warm-gray: #B8A9A6;
-  
-  /* Text colors */
+
   --text-dark: #333333;
   --text-muted: #84406a;
   --text-highlight: #a8325a;
 }
 
-/* === Global Reset & Base === */
+/* === Global Styles === */
 html, body {
   margin: 0;
   padding: 0;
   height: 100%;
   overflow-y: auto;
   font-family: 'Quicksand', sans-serif;
-
-  /* Animated pastel gradient background */
   background: linear-gradient(135deg, var(--mint-green), var(--soft-pink), #ffdcf5, #f2f4c3);
   background-size: 400% 400%;
   animation: gradientShift 12s ease infinite;
@@ -37,17 +33,14 @@ html, body {
   100% { background-position: 0% 50%; }
 }
 
-/* === Cart Page Styles === */
 .cart-page {
   min-height: 100vh;
-  background: var(--soft-pink); /* replace #ffdcf5 */
-  font-family: 'Quicksand', sans-serif;
   padding: 2rem;
 }
 
 .cart-header {
   font-size: 2rem;
-  color: var(--text-highlight); /* replace #c36d96 */
+  color: var(--text-highlight);
   text-align: center;
   font-weight: 600;
   margin-bottom: 2rem;
@@ -55,14 +48,14 @@ html, body {
 
 .loading {
   text-align: center;
-  color: var(--text-highlight); /* replace #c36d96 */
+  color: var(--text-highlight);
   font-size: 1.2rem;
 }
 
 .empty-cart-message {
   text-align: center;
   font-size: 1.1rem;
-  color: var(--text-muted); /* replace #8d2d56 */
+  color: var(--text-muted);
   margin-top: 3rem;
 }
 
@@ -74,8 +67,8 @@ html, body {
 }
 
 .cart-card {
-  background-color: var(--creamy-white); /* replace #ffffff */
-  border: 2px solid var(--blush-pink); /* replace #fdc7ff */
+  background-color: var(--creamy-white);
+  border: 2px solid var(--blush-pink);
   border-radius: 1rem;
   padding: 1.2rem;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
@@ -100,14 +93,14 @@ html, body {
 
 .cart-card-details h2 {
   font-size: 1rem;
-  color: var(--text-dark); /* replace #333 */
+  color: var(--text-dark);
   margin-bottom: 0.3rem;
 }
 
 .price,
 .subtotal {
   font-size: 0.9rem;
-  color: var(--warm-gray); /* replace #5e5e5e */
+  color: var(--warm-gray);
 }
 
 .subtotal {
@@ -116,7 +109,7 @@ html, body {
 
 .remove-btn {
   margin-top: 0.8rem;
-  background-color: var(--f2f4c3, #f2f4c3); /* same as before, custom fourth color */
+  background-color: #f2f4c3;
   color: #666600;
   border: none;
   padding: 0.4rem 0.9rem;
@@ -131,34 +124,43 @@ html, body {
   background-color: #e0e3b0;
 }
 
+/* === 🧾 Improved Checkout Section === */
 .cart-summary-box {
   max-width: 420px;
-  background-color: var(--mint-green); /* replace #c7f3ff with mint-green */
+  background-color: #fff0f5;
   margin: 0 auto;
-  padding: 2rem;
-  border-radius: 1.2rem;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  padding: 2.5rem 2rem;
+  border-radius: 1.5rem;
+  box-shadow: 0 10px 30px rgba(255, 182, 193, 0.3);
   text-align: center;
+  transition: transform 0.3s ease;
+}
+
+.cart-summary-box:hover {
+  transform: translateY(-5px);
 }
 
 .cart-summary-box h3 {
-  font-size: 1.4rem;
-  color: var(--text-highlight); /* replace #c36d96 */
-  margin-bottom: 1.2rem;
+  font-size: 1.8rem;
+  color: #d94f70;
+  margin-bottom: 1.4rem;
+  font-weight: 600;
 }
 
 .checkout-btn {
-  background-color: var(--blush-pink); /* replace #fdc7ff */
-  color: #5e004d;
-  padding: 0.6rem 1.8rem;
-  border: none;
-  border-radius: 1.2rem;
+  background-color: #ff99ac;
+  color: white;
   font-size: 1rem;
   font-weight: 600;
+  border: none;
+  border-radius: 2rem;
+  padding: 0.6rem 1.6rem;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  box-shadow: 0 5px 15px rgba(255, 153, 172, 0.3);
+  transition: all 0.3s ease;
 }
 
 .checkout-btn:hover {
-  background-color: var(--peachy-coral); /* replace #f7a7f9 */
+  background-color: #ff6f91;
+  transform: scale(1.05);
 }

@@ -79,7 +79,7 @@ const CartPage = () => {
           <div className="cart-summary-box">
             <h3>Total: ${cart.totalAmount.toFixed(2)}</h3>
             <button className="checkout-btn" onClick={handleCheckout}>
-              Checkout 💖
+              Checkout
             </button>
           </div>
         </>

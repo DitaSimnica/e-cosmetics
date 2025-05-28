@@ -8,6 +8,8 @@ import "./ProductsPage.css";
 
 const ProductsPage = () => {
   const [products, setProducts] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [sortOrder, setSortOrder] = useState("");
   const [showSparkles, setShowSparkles] = useState(false);
   const navigate = useNavigate();
   const cartControls = useAnimation();
@@ -21,7 +23,6 @@ const ProductsPage = () => {
         toast.error("Oops! Failed to load products 🥺");
       }
     };
-
     fetchProducts();
   }, []);
 
@@ -30,13 +31,11 @@ const ProductsPage = () => {
       await axios.post("/cart/add", { productId, quantity: 1 });
       toast.success("Added to cart 🛒✨");
 
-      // Trigger cart shake
       await cartControls.start({
         rotate: [0, -15, 15, -10, 10, 0],
         transition: { duration: 0.6 },
       });
 
-      // Trigger sparkles
       setShowSparkles(true);
       setTimeout(() => setShowSparkles(false), 1000);
     } catch {
@@ -44,10 +43,20 @@ const ProductsPage = () => {
     }
   };
 
+  const filteredProducts = products.filter((product) =>
+    product.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const sortedProducts = [...filteredProducts].sort((a, b) => {
+    if (sortOrder === "asc") return a.price - b.price;
+    if (sortOrder === "desc") return b.price - a.price;
+    return 0;
+  });
+
   return (
     <div className="products-page">
       <div className="products-header">
-        <h1 className="products-page__title">Our Lovely Products</h1>
+        <h1 className="products-page__title">Discover Your Favorites</h1>
         <motion.div animate={cartControls} className="cart-container">
           <FaShoppingCart
             size={26}
@@ -64,11 +73,30 @@ const ProductsPage = () => {
         </motion.div>
       </div>
 
-      {products.length === 0 ? (
+      <div className="filters">
+        <input
+          type="text"
+          placeholder="Search products..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="search-box"
+        />
+        <select
+          className="sort-select"
+          value={sortOrder}
+          onChange={(e) => setSortOrder(e.target.value)}
+        >
+          <option value="">Sort by price</option>
+          <option value="asc">Lowest to Highest</option>
+          <option value="desc">Highest to Lowest</option>
+        </select>
+      </div>
+
+      {sortedProducts.length === 0 ? (
         <p className="no-products-text">No products available at the moment 🥲</p>
       ) : (
         <div className="products-grid">
-          {products.map((product) => (
+          {sortedProducts.map((product) => (
             <div key={product.id} className="product-card">
               <img
                 src={product.imageUrl}

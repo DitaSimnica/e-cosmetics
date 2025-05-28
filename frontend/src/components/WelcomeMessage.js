@@ -35,7 +35,7 @@ const WelcomeMessage = () => {
         <FaMagic className="icon" />
         <FaStar className="icon" />
       </div>
-      <h1>Welcome to <span className="brand">e-Cosmetics</span></h1>
+      <h1>Welcome to <span className="brand">E-Cosmetics</span></h1>
       <p>Your glow journey begins now ✨</p>
     </motion.div>
   );

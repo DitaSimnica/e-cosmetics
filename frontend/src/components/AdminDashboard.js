@@ -16,52 +16,41 @@ const AdminDashboard = () => {
   const [userCount, setUserCount] = useState(0);
   const [productCount, setProductCount] = useState(0);
   const [orderCount, setOrderCount] = useState(0);
+  const [loading, setLoading] = useState(true);
+  const [errorMsg, setErrorMsg] = useState('');
 
   useEffect(() => {
     const token = localStorage.getItem('authToken');
+    if (!token) {
+      navigate('/login');
+      return;
+    }
 
-    const fetchUsers = async () => {
+    const fetchData = async () => {
+      setLoading(true);
+      setErrorMsg('');
       try {
-        const response = await api.get('/user', {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        setUserCount(response.data.length);
+        const [usersRes, productsRes, ordersRes] = await Promise.all([
+          api.get('/user', { headers: { Authorization: `Bearer ${token}` } }),
+          api.get('/product', { headers: { Authorization: `Bearer ${token}` } }),
+          api.get('/order/all', { headers: { Authorization: `Bearer ${token}` } }),
+        ]);
+        setUserCount(usersRes.data.length);
+        setProductCount(productsRes.data.length);
+        setOrderCount(ordersRes.data.length);
       } catch (error) {
-        console.error('Error fetching users:', error);
         if (error.response?.status === 401 || error.response?.status === 403) {
           navigate('/login');
+        } else {
+          setErrorMsg('Failed to fetch data. Please try again later.');
+          console.error(error);
         }
+      } finally {
+        setLoading(false);
       }
     };
 
-    const fetchProducts = async () => {
-      try {
-        const response = await api.get('/product', {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        setProductCount(response.data.length);
-      } catch (error) {
-        console.error('Error fetching products:', error);
-      }
-    };
-
-    const fetchOrders = async () => {
-      try {
-        const response = await api.get('/order/all', {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        setOrderCount(response.data.length);
-      } catch (error) {
-        console.error('Error fetching orders:', error);
-        if (error.response?.status === 401 || error.response?.status === 403) {
-          navigate('/login');
-        }
-      }
-    };
-
-    fetchUsers();
-    fetchProducts();
-    fetchOrders();
+    fetchData();
   }, [navigate]);
 
   const handleLogout = () => {
@@ -95,51 +84,64 @@ const AdminDashboard = () => {
 
   return (
     <div className="dashboard-wrapper">
-      <aside className="sidebar">
+      <aside className="sidebar" aria-label="Sidebar Navigation">
         <h4 className="sidebar-title">
-          <FaRegHeart className="icon-pink" /> Admin Panel
+          <FaRegHeart className="icon-pink" aria-hidden="true" /> Admin Panel
         </h4>
-        <nav className="nav-links">
+        <nav className="nav-links" aria-label="Admin Navigation Links">
           <Link className="nav-link" to="/adminDashboard/products">
-            <GiLipstick className="icon-pink" /> Manage Products
+            <GiLipstick className="icon-pink" aria-hidden="true" /> Manage Products
           </Link>
           <Link className="nav-link" to="/adminDashboard/users">
-            <MdFaceRetouchingNatural className="icon-pink" /> Manage Users
+            <MdFaceRetouchingNatural className="icon-pink" aria-hidden="true" /> Manage Users
           </Link>
         </nav>
-        <button className="logout-btn" onClick={handleLogout}>
-          <IoMdExit className="icon-pink" /> Logout
+        <button
+          className="logout-btn"
+          onClick={handleLogout}
+          aria-label="Logout"
+          type="button"
+        >
+          <IoMdExit className="icon-pink" aria-hidden="true" /> Logout
         </button>
       </aside>
 
-      <main className="main-content">
+      <main className="main-content" role="main">
         <h2 className="welcome">Welcome Admin 🌸</h2>
         <p className="subtitle">Here's a snapshot of your dashboard:</p>
 
-        <section className="cards-grid">
-          <div className="dashboard-card">
-            <GiPerfumeBottle className="card-icon" />
-            <h4>Total Products</h4>
-            <p className="count">{productCount}</p>
-          </div>
-          <div className="dashboard-card">
-            <FaUserFriends className="card-icon" />
-            <h4>Total Users</h4>
-            <p className="count">{userCount}</p>
-          </div>
-          <div className="dashboard-card">
-            <GiGiftOfKnowledge className="card-icon" />
-            <h4>Total Orders</h4>
-            <p className="count">{orderCount}</p>
-          </div>
-        </section>
+        {loading ? (
+          <p className="loading-message">Loading dashboard data...</p>
+        ) : errorMsg ? (
+          <p className="error-message">{errorMsg}</p>
+        ) : (
+          <>
+            <section className="cards-grid" aria-label="Dashboard stats cards">
+              <article className="dashboard-card" tabIndex="0" aria-labelledby="products-title products-count">
+                <GiPerfumeBottle className="card-icon" aria-hidden="true" />
+                <h4 id="products-title">Total Products</h4>
+                <p id="products-count" className="count">{productCount}</p>
+              </article>
+              <article className="dashboard-card" tabIndex="0" aria-labelledby="users-title users-count">
+                <FaUserFriends className="card-icon" aria-hidden="true" />
+                <h4 id="users-title">Total Users</h4>
+                <p id="users-count" className="count">{userCount}</p>
+              </article>
+              <article className="dashboard-card" tabIndex="0" aria-labelledby="orders-title orders-count">
+                <GiGiftOfKnowledge className="card-icon" aria-hidden="true" />
+                <h4 id="orders-title">Total Orders</h4>
+                <p id="orders-count" className="count">{orderCount}</p>
+              </article>
+            </section>
 
-        <section className="chart-wrapper">
-          <h4 className="text-center chart-title">Overview Chart</h4>
-          <Pie data={data} options={options} />
-        </section>
+            <section className="chart-wrapper" aria-label="Dashboard data overview chart">
+              <h4 className="text-center chart-title">Overview Chart</h4>
+              <Pie data={data} options={options} />
+            </section>
 
-        <p className="footer-note">Use the sidebar to manage content 💅</p>
+            <p className="footer-note" aria-live="polite">Use the sidebar to manage content</p>
+          </>
+        )}
       </main>
     </div>
   );
