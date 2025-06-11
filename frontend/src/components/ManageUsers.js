@@ -26,11 +26,6 @@ const ManageUsers = () => {
     fetchUsers();
   }, [navigate]);
 
-  const handleEdit = (userId) => {
-    alert(`Edit user with ID: ${userId}`);
-    // Future: navigate to edit user page or open modal
-  };
-
   const handleDelete = async (userId) => {
     const confirm = window.confirm("Are you sure you want to delete this user?");
     if (!confirm) return;
@@ -61,7 +56,7 @@ const ManageUsers = () => {
                 <th>Username</th>
                 <th>Email</th>
                 <th>Role</th>
-                <th className="text-center">Actions</th>
+                <th className="text-center">Delete</th>
               </tr>
             </thead>
             <tbody>
@@ -76,7 +71,6 @@ const ManageUsers = () => {
                     </span>
                   </td>
                   <td className="text-center">
-                    <button className="btn-edit" onClick={() => handleEdit(user.id)}>Edit</button>
                     <button className="btn-delete" onClick={() => handleDelete(user.id)}>Delete</button>
                   </td>
                 </tr>

@@ -35,7 +35,7 @@ const CartPage = () => {
 
   const handleCheckout = async () => {
     try {
-      await axios.post("/order");
+      await axios.post("/order", {});
       toast.success("Order placed successfully!");
       fetchCart();
     } catch (err) {
@@ -48,6 +48,7 @@ const CartPage = () => {
   return (
     <div className="cart-page">
       <h1 className="cart-header">🛍️ Your Beauty Cart</h1>
+
       {cart?.products.length === 0 ? (
         <div className="empty-cart-message">
           <p>🛒 Your cart is empty</p>
@@ -55,6 +56,17 @@ const CartPage = () => {
         </div>
       ) : (
         <>
+          {/* List of product names */}
+          <div className="product-names-list">
+            <h3>Products in your cart:</h3>
+            <ul>
+              {cart.products.map(({ product }, index) => (
+                <li key={index}>{product.name}</li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Cart product cards */}
           <div className="cart-products-container">
             {cart.products.map(({ product, quantity }, index) => (
               <div key={index} className="cart-card">
@@ -76,6 +88,7 @@ const CartPage = () => {
             ))}
           </div>
 
+          {/* Cart summary and checkout */}
           <div className="cart-summary-box">
             <h3>Total: ${cart.totalAmount.toFixed(2)}</h3>
             <button className="checkout-btn" onClick={handleCheckout}>

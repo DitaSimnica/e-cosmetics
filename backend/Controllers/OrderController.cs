@@ -79,6 +79,7 @@ namespace backend.Controllers
                 return Unauthorized("Invalid user ID.");
 
             var orders = await _context.Orders
+                .Include(o => o.Products)
                 .Where(o => o.UserId == userId)
                 .ToListAsync();
 

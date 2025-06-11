@@ -22,21 +22,19 @@ const MyOrdersPage = () => {
     fetchOrders();
   }, []);
 
-  if (loading) return <p>Loading your adorable orders... 💌</p>;
-
   return (
     <div className="orders-page">
-      <h2>📦 Your Orders</h2>
-      {orders.length === 0 ? (
-        <p>You haven’t placed any orders yet. Let’s fix that! 🛍️</p>
+      <h2 className="orders-title">📦 Your Orders</h2>
+      {loading ? (
+        <p className="loading-text">Loading your adorable orders... 💌</p>
+      ) : orders.length === 0 ? (
+        <p className="empty-text">You haven’t placed any orders yet. Let’s fix that! 🛍️</p>
       ) : (
         <ul className="order-list">
           {orders.map((order) => (
             <li key={order.id} className="order-card">
-              <p><strong>Order ID:</strong> {order.id}</p>
-              <p><strong>Date:</strong> {new Date(order.createdAt).toLocaleDateString()}</p>
+              <h3 className="order-id"># {order.id}</h3>
               <p><strong>Status:</strong> {order.status}</p>
-              {/* Add more fields as needed */}
             </li>
           ))}
         </ul>

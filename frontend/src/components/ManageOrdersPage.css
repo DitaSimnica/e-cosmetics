@@ -1,0 +1,25 @@
+/* ManageOrdersPage.css */
+.manage-orders-page {
+  padding: 1rem;
+}
+
+.manage-orders-page table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.manage-orders-page th, 
+.manage-orders-page td {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+.manage-orders-page th {
+  background-color: #f7c1d4;
+  color: #880e4f;
+}
+
+.manage-orders-page select {
+  padding: 4px;
+  border-radius: 4px;
+}

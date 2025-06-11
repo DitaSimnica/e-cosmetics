@@ -45,6 +45,7 @@ function App() {
           path="/adminDashboard/users"
           element={isAuthenticated ? <ManageUsers /> : <Navigate to="/login" />}
         />
+
         <Route path="/customerDashboard" element={<CustomerDashboard />} />
         <Route path="/shop" element={<ProductsPage />} />
         <Route path="/cart" element={<CartPage />} />
