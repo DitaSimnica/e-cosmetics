@@ -1,7 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&display=swap');
 
 :root {
-  /* From your first palette */
   --soft-pink: #FADADD;
   --blush-pink: #F6A6B2;
   --peachy-coral: #FF6F61;
@@ -13,7 +12,6 @@
   --text-muted: #84406a;
   --text-highlight: #a8325a;
 
-  /* Original variables from second CSS, renamed */
   --first-color: var(--mint-green);
   --second-color: var(--blush-pink);
   --third-color: var(--soft-pink);
@@ -46,6 +44,12 @@ body {
   text-align: center;
   font-weight: bold;
   font-family: 'Quicksand', sans-serif;
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
 }
 
 /* 🌟 Dashboard Box */
@@ -54,25 +58,18 @@ body {
   backdrop-filter: blur(14px);
   padding: 3rem;
   border-radius: 30px;
-  box-shadow: 0 8px 24px rgba(246, 166, 178, 0.35); /* blush pink shadow */
+  box-shadow: 0 8px 24px rgba(246, 166, 178, 0.35);
   text-align: center;
   max-width: 500px;
   width: 100%;
   border: 2px solid var(--second-color);
-  position: relative;
   z-index: 2;
   animation: fadeSlideIn 0.8s ease-out both;
 }
 
 @keyframes fadeSlideIn {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .dashboard-box h2 {
@@ -86,6 +83,7 @@ body {
   color: var(--text-color);
   margin-bottom: 2rem;
   font-size: 1.15rem;
+  font-style: italic;
 }
 
 /* 🎀 Buttons */
@@ -102,10 +100,26 @@ body {
   cursor: pointer;
   transform: scale(1);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  position: relative;
+}
+
+/* ✨ Sparkle Effect */
+.actions .btn::after {
+  content: "✨";
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
 }
 
 .actions .btn:hover {
   transform: scale(1.05);
+}
+
+.actions .btn:hover::after {
+  opacity: 1;
 }
 
 /* 🛍️ Shop */
@@ -115,7 +129,7 @@ body {
 }
 
 .btn-shop:hover {
-  background-color: #fcaeff; /* lighter blush pink */
+  background-color: #fcaeff;
 }
 
 /* 📦 Orders */
@@ -150,5 +164,10 @@ body {
 
   .dashboard-box p {
     font-size: 1rem;
+  }
+
+  .actions .btn {
+    font-size: 0.95rem;
+    padding: 11px;
   }
 }

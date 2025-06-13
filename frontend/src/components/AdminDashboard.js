@@ -64,7 +64,7 @@ const AdminDashboard = () => {
       {
         label: 'Counts',
         data: [productCount, userCount, orderCount],
-        backgroundColor: ['#d63384', '#f77eb9', '#ffb6c1'],
+        backgroundColor: ['#ff6f91', '#ffb3c1', '#ffd6e8'],
         borderColor: '#fff',
         borderWidth: 2,
       },
@@ -76,7 +76,7 @@ const AdminDashboard = () => {
     plugins: {
       legend: {
         position: 'bottom',
-        labels: { color: '#880e4f', font: { weight: '600', size: 14 } },
+        labels: { color: '#b3385b', font: { weight: '700', size: 15 } },
       },
       tooltip: { enabled: true },
     },
@@ -117,20 +117,38 @@ const AdminDashboard = () => {
         ) : (
           <>
             <section className="cards-grid" aria-label="Dashboard stats cards">
-              <article className="dashboard-card" tabIndex="0" aria-labelledby="products-title products-count">
+              <article
+                className="dashboard-card"
+                tabIndex="0"
+                aria-labelledby="products-title products-count"
+              >
                 <GiPerfumeBottle className="card-icon" aria-hidden="true" />
                 <h4 id="products-title">Total Products</h4>
-                <p id="products-count" className="count">{productCount}</p>
+                <p id="products-count" className="count">
+                  {productCount}
+                </p>
               </article>
-              <article className="dashboard-card" tabIndex="0" aria-labelledby="users-title users-count">
+              <article
+                className="dashboard-card"
+                tabIndex="0"
+                aria-labelledby="users-title users-count"
+              >
                 <FaUserFriends className="card-icon" aria-hidden="true" />
                 <h4 id="users-title">Total Users</h4>
-                <p id="users-count" className="count">{userCount}</p>
+                <p id="users-count" className="count">
+                  {userCount}
+                </p>
               </article>
-              <article className="dashboard-card" tabIndex="0" aria-labelledby="orders-title orders-count">
+              <article
+                className="dashboard-card"
+                tabIndex="0"
+                aria-labelledby="orders-title orders-count"
+              >
                 <GiGiftOfKnowledge className="card-icon" aria-hidden="true" />
                 <h4 id="orders-title">Total Orders</h4>
-                <p id="orders-count" className="count">{orderCount}</p>
+                <p id="orders-count" className="count">
+                  {orderCount}
+                </p>
               </article>
             </section>
 
@@ -139,7 +157,9 @@ const AdminDashboard = () => {
               <Pie data={data} options={options} />
             </section>
 
-            <p className="footer-note" aria-live="polite">Use the sidebar to manage content</p>
+            <p className="footer-note" aria-live="polite">
+              Use the sidebar to manage content
+            </p>
           </>
         )}
       </main>

@@ -1,3 +1,14 @@
+:root {
+  --peachy-coral: #f48fb1;
+  --blush-pink: #f7a8b8;
+  --creamy-white: #fff5f7;
+  --text-dark: #5a132e;
+  --text-muted: #a77087;
+  --text-highlight: #7e274b;
+  --mint-green: #d3f8e2;
+  --soft-pink: #ffd1dc;
+}
+
 .orders-page {
   padding: 2rem;
   font-family: 'Quicksand', sans-serif;
@@ -8,51 +19,181 @@
 
 .orders-title {
   font-size: 2rem;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
   color: var(--peachy-coral);
   text-align: center;
 }
 
-.loading-text,
-.empty-text {
-  text-align: center;
-  font-size: 1.2rem;
-  color: var(--text-muted);
-  margin-top: 2rem;
+/* Summary */
+.orders-summary {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+  font-weight: 600;
+  color: var(--text-highlight);
 }
 
+.orders-summary > div {
+  background: var(--creamy-white);
+  padding: 0.8rem 1.2rem;
+  border-radius: 1rem;
+  box-shadow: 0 2px 6px rgba(244, 153, 187, 0.3);
+  min-width: 120px;
+  text-align: center;
+}
+
+/* Controls */
+.orders-controls {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+
+.order-search,
+.order-sort {
+  padding: 0.6rem 1rem;
+  border-radius: 12px;
+  border: 2px solid var(--blush-pink);
+  font-size: 1rem;
+  font-family: 'Quicksand', sans-serif;
+  background-color: white;
+  color: var(--text-dark);
+  min-width: 200px;
+  max-width: 300px;
+  transition: border-color 0.3s ease;
+}
+
+.order-search:focus,
+.order-sort:focus {
+  outline: none;
+  border-color: var(--peachy-coral);
+  box-shadow: 0 0 8px rgba(244, 153, 187, 0.4);
+}
+
+/* Order list */
 .order-list {
   list-style: none;
   padding: 0;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 1rem;
+  gap: 1.2rem;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
 }
 
+/* Single order */
 .order-card {
   background: var(--creamy-white);
   border: 2px solid var(--blush-pink);
   border-radius: 1rem;
-  padding: 1.2rem;
+  padding: 1rem 1.5rem;
   box-shadow: 0 2px 4px rgba(246, 166, 178, 0.3);
+  cursor: pointer;
   transition: all 0.3s ease;
 }
 
 .order-card:hover {
-  box-shadow: 0 4px 8px rgba(246, 166, 178, 0.5);
+  box-shadow: 0 4px 12px rgba(244, 153, 187, 0.6);
   border-color: var(--peachy-coral);
   transform: translateY(-3px);
 }
 
+.order-summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
 .order-id {
-  margin: 0 0 0.5rem;
-  font-size: 1.1rem;
+  margin: 0;
+  font-size: 1.15rem;
   color: var(--peachy-coral);
   font-weight: bold;
 }
 
-.order-card p {
-  margin: 0.3rem 0;
-  color: var(--text-highlight);
+.order-status {
+  color: white;
+  padding: 0.25rem 0.7rem;
+  border-radius: 1rem;
+  font-weight: 600;
+  font-size: 0.9rem;
+  min-width: 90px;
+  text-align: center;
+}
+
+.order-date {
+  color: var(--text-muted);
+  font-size: 0.9rem;
   font-weight: 500;
+}
+
+/* Expanded details */
+.order-details {
+  margin-top: 1rem;
+  border-top: 1px solid var(--blush-pink);
+  padding-top: 1rem;
+  overflow: hidden;
+}
+
+/* Product thumbnails */
+.product-thumbnails {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.product-thumb {
+  width: 45px;
+  height: 45px;
+  object-fit: cover;
+  border-radius: 0.6rem;
+  border: 1px solid var(--blush-pink);
+  box-shadow: 0 2px 5px rgba(246, 145, 179, 0.3);
+}
+
+/* Reorder button */
+.btn-reorder {
+  background: var(--peachy-coral);
+  border: none;
+  color: white;
+  padding: 0.5rem 1.2rem;
+  border-radius: 0.6rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  margin-top: 0.5rem;
+}
+
+.btn-reorder:hover {
+  background: #be185d;
+}
+
+/* Loading & empty text */
+.loading-text,
+.empty-text {
+  text-align: center;
+  font-size: 1.3rem;
+  color: var(--text-muted);
+  margin-top: 4rem;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .orders-summary {
+    flex-direction: column;
+    align-items: center;
+  }
+  .orders-controls {
+    flex-direction: column;
+    align-items: center;
+  }
+  .order-summary {
+    flex-direction: column;
+    gap: 0.3rem;
+  }
 }

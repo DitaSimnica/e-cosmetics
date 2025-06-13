@@ -1,11 +1,29 @@
 @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&display=swap');
 
+:root {
+  --soft-pink-gradient: linear-gradient(135deg, #fff0f5, #ffe6f9);
+  --hot-pink-gradient: linear-gradient(135deg, #ffb6c1, #ff99bb);
+  --hot-pink-hover: linear-gradient(135deg, #ff8aad, #ff779b);
+  --text-color: #4a0033;
+  --heading-color: #d63384;
+  --form-border: #ffd6e3;
+  --description-color: #8a4f68;
+  --shadow-light: rgba(255, 182, 193, 0.15);
+}
+
+* {
+  transition: all 0.25s ease-in-out;
+  box-sizing: border-box;
+}
+
 body {
   font-family: 'Quicksand', sans-serif;
-  background: linear-gradient(135deg, #ffe6f9 0%, #fff0f5 100%);
+  background: var(--soft-pink-gradient);
   margin: 0;
   padding: 0;
-  color: #4a0033; /* matching text color */
+  color: var(--text-color);
+  letter-spacing: 0.3px;
+  line-height: 1.6;
 }
 
 /* Main container */
@@ -13,16 +31,16 @@ body {
   max-width: 900px;
   margin: 40px auto;
   padding: 20px;
-  background: linear-gradient(135deg, #fff0f5, #ffe6f9);
+  background: var(--soft-pink-gradient);
   border-radius: 20px;
   box-shadow:
     0 6px 16px rgba(255, 182, 193, 0.3),
-    inset 0 0 15px rgba(255, 182, 193, 0.15);
+    inset 0 0 15px var(--shadow-light);
 }
 
 /* Heading */
 h2 {
-  color: #d63384;
+  color: var(--heading-color);
   font-weight: 600;
   text-align: center;
   margin-bottom: 30px;
@@ -30,43 +48,48 @@ h2 {
 
 /* Pink button */
 .btn-pink {
-  background: linear-gradient(135deg, #ffb6c1, #ff99bb);
+  background: var(--hot-pink-gradient);
   border: none;
   color: white;
   font-weight: bold;
   padding: 10px 20px;
   border-radius: 10px;
-  transition: background 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
   box-shadow: 0 4px 15px rgba(255, 105, 180, 0.5);
 }
 
 .btn-pink:hover {
-  background: linear-gradient(135deg, #ff8aad, #ff779b);
+  background: var(--hot-pink-hover);
   box-shadow: 0 6px 20px rgba(255, 105, 180, 0.7);
+}
+
+.btn:focus,
+.form-control:focus {
+  outline: 2px dashed #ff99bb;
+  outline-offset: 2px;
 }
 
 /* Card container for form */
 .card {
-  background: linear-gradient(135deg, #ffe6f9, #fff0f5);
+  background: var(--soft-pink-gradient);
   border-radius: 15px;
   box-shadow:
     0 4px 10px rgba(255, 182, 193, 0.2),
-    inset 0 0 15px rgba(255, 182, 193, 0.15);
+    inset 0 0 15px var(--shadow-light);
 }
 
 /* Form fields */
 .form-control {
-  border: 2px solid #ffd6e3;
+  border: 2px solid var(--form-border);
   border-radius: 10px;
   padding: 10px;
   font-size: 1rem;
   margin-bottom: 10px;
-  transition: border-color 0.3s ease;
 }
 
-.form-control:focus {
-  border-color: #d63384;
-  outline: none;
+button:active {
+  transform: scale(0.97);
 }
 
 /* Success button */
@@ -77,7 +100,8 @@ button.btn-success {
   font-weight: bold;
   padding: 10px 20px;
   border-radius: 10px;
-  transition: background 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
   box-shadow: 0 4px 15px rgba(217, 77, 133, 0.5);
 }
 
@@ -88,7 +112,7 @@ button.btn-success:hover {
 
 /* Product List Items */
 .cute-list .list-group-item {
-  background: linear-gradient(135deg, #fff0f5, #ffe6f9);
+  background: var(--soft-pink-gradient);
   border: 1px solid #ffddee;
   border-radius: 12px;
   margin-bottom: 12px;
@@ -98,11 +122,16 @@ button.btn-success:hover {
   align-items: center;
   padding: 15px;
   flex-wrap: wrap;
-  box-shadow: 0 2px 8px rgba(255, 182, 193, 0.15);
+  box-shadow: 0 2px 8px var(--shadow-light);
 }
 
-/* Image Styling */
-.cute-list img {
+.cute-list .list-group-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(255, 182, 193, 0.3);
+}
+
+/* Product Image */
+.product-image {
   width: 60px;
   height: 60px;
   object-fit: cover;
@@ -144,7 +173,25 @@ button.btn-success:hover {
 
 /* Description text */
 .description-text {
-  color: #8a4f68;
+  color: var(--description-color);
   margin-top: 5px;
   font-size: 0.9rem;
+}
+
+/* Responsive tweaks */
+@media (max-width: 600px) {
+  .product-image {
+    width: 100%;
+    height: auto;
+    margin: 10px 0;
+  }
+
+  .cute-list .list-group-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .cute-list .btn-sm {
+    margin: 8px 5px 0 0;
+  }
 }

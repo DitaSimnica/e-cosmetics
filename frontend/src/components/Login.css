@@ -1,27 +1,14 @@
-@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Parisienne&family=Poppins:wght@400;600&display=swap');
 
 /* === Color Palette Variables === */
 :root {
-  /* Cute & Girly Palette from your second snippet */
-  --soft-pink: #FADADD;
-  --blush-pink: #F6A6B2;
-  --peachy-coral: #FF6F61;
-  --mint-green: #C6E7D9;
-  --creamy-white: #FFF8F0;
-  --warm-gray: #B8A9A6;
-  
-  /* Text colors */
-  --text-dark: #333333;
-  --text-muted: #84406a;
-  --text-highlight: #a8325a;
-
-  /* Also keep your first snippet’s colors for accents and backgrounds */
-  --first-color: #c7f3ff;   /* Soft Aqua */
-  --second-color: #fdc7ff;  /* Cotton Candy */
-  --third-color: #ffdcf5;   /* Blush Pink */
-  --fourth-color: #f2f4c3;  /* Pastel Lemon */
-  --accent-color: #ff69b4;  /* Hot Pink */
-  --dark-text: #5e005e;
+  --soft-pink: #ffe6f0;
+  --blush-pink: #ffb6c1;
+  --rose-pink: #ff69b4;
+  --creamy-white: #fffafa;
+  --text-dark: #4b2c39;
+  --text-muted: #b06789;
+  --text-highlight: #e75480;
 }
 
 /* === Global Reset & Base === */
@@ -29,11 +16,9 @@ html, body {
   margin: 0;
   padding: 0;
   height: 100%;
-  overflow-y: auto; /* Always allow vertical scroll */
-  font-family: 'Quicksand', sans-serif;
-
-  /* Use the animated pastel gradient background from second snippet */
-  background: linear-gradient(135deg, var(--mint-green), var(--soft-pink), #ffdcf5, #f2f4c3);
+  overflow-y: auto;
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(135deg, var(--soft-pink), var(--creamy-white), #ffe0ef, #ffffff);
   background-size: 400% 400%;
   animation: gradientShift 12s ease infinite;
   color: var(--text-dark);
@@ -41,21 +26,20 @@ html, body {
   min-height: 100vh;
 }
 
-/* Gradient animation keyframes */
 @keyframes gradientShift {
   0% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
   100% { background-position: 0% 50%; }
 }
 
-/* === Sparkle overlay from first snippet */
+/* ✨ Sparkle overlay */
 body::after {
   content: '';
   position: absolute;
   top: 0; left: 0;
   width: 100%; height: 100%;
-  background-image: radial-gradient(#ffffff55 1px, transparent 1px);
-  background-size: 25px 25px;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.25) 1px, transparent 1px);
+  background-size: 18px 18px;
   opacity: 0.15;
   animation: shimmer 8s linear infinite;
   pointer-events: none;
@@ -63,28 +47,8 @@ body::after {
 }
 
 @keyframes shimmer {
-  0% { background-position: 0 0; }
-  100% { background-position: 100% 100%; }
-}
-
-/* ❤️ Floating Hearts */
-.floating-heart {
-  position: absolute;
-  bottom: -30px;
-  font-size: 1.5rem;
-  color: var(--second-color);
-  animation: heartFloat 10s ease-in-out infinite;
-  z-index: 0;
-  opacity: 0.8;
-}
-
-.floating-heart:nth-child(1) { left: 10%; animation-delay: 0s; }
-.floating-heart:nth-child(2) { left: 45%; animation-delay: 2s; }
-.floating-heart:nth-child(3) { left: 75%; animation-delay: 4s; }
-
-@keyframes heartFloat {
-  0% { transform: translateY(0) scale(1); opacity: 0.8; }
-  100% { transform: translateY(-200px) scale(1.4); opacity: 0; }
+  from { background-position: 0 0; }
+  to { background-position: 100% 100%; }
 }
 
 /* 🧁 Login Form Container */
@@ -99,12 +63,12 @@ body::after {
 }
 
 .login-form {
-  background: rgba(255, 255, 255, 0.6);
-  border: 2px solid var(--blush-pink); /* Use blush pink from second palette */
-  backdrop-filter: blur(20px);
+  background: rgba(255, 255, 255, 0.4);
+  border: 2px solid var(--blush-pink);
+  backdrop-filter: blur(18px);
   padding: 2rem;
   border-radius: 20px;
-  box-shadow: 0 10px 30px rgba(246, 166, 178, 0.35); /* soft shadow with second snippet colors */
+  box-shadow: 0 10px 30px rgba(255, 182, 193, 0.35);
   width: 360px;
   text-align: center;
   position: relative;
@@ -116,10 +80,10 @@ body::after {
   transform: scale(1.01);
 }
 
-/* 🧸 Icon + Title */
+/* 💗 Icon + Title */
 .login-icon {
   font-size: 2.5rem;
-  color: var(--blush-pink);
+  color: var(--rose-pink);
   margin-bottom: 0.75rem;
   animation: float 3s ease-in-out infinite;
 }
@@ -130,9 +94,10 @@ body::after {
 }
 
 .login-form h2 {
-  color: var(--peachy-coral);
+  color: var(--rose-pink);
   font-size: 2rem;
   margin-bottom: 1rem;
+  
 }
 
 /* 🎀 Input Fields */
@@ -148,8 +113,8 @@ body::after {
 }
 
 .login-form input:focus {
-  border-color: var(--peachy-coral);
-  box-shadow: 0 0 10px rgba(255, 111, 97, 0.6); /* peachy coral glow */
+  border-color: var(--rose-pink);
+  box-shadow: 0 0 10px rgba(255, 105, 180, 0.5);
   outline: none;
 }
 
@@ -169,13 +134,13 @@ body::after {
 }
 
 .login-form button:hover {
-  background-color: var(--peachy-coral);
+  background-color: var(--rose-pink);
   color: white;
   transform: scale(1.03);
 }
 
 .login-form button:disabled {
-  background-color: #e4d2e9;
+  background-color: #f5d4de;
   cursor: not-allowed;
 }
 
@@ -194,7 +159,7 @@ body::after {
 }
 
 .register-link-text {
-  color: var(--peachy-coral);
+  color: var(--rose-pink);
   font-weight: bold;
   text-decoration: none;
   transition: color 0.3s ease;

@@ -1,94 +1,171 @@
+@import url('https://fonts.googleapis.com/css2?family=Parisienne&family=Poppins:wght@400;600&display=swap');
+
+/* === Color Palette Variables === */
+:root {
+  --soft-pink: #ffe6f0;
+  --blush-pink: #ffb6c1;
+  --rose-pink: #ff69b4;
+  --creamy-white: #fffafa;
+  --text-dark: #4b2c39;
+  --text-muted: #b06789;
+  --text-highlight: #e75480;
+}
+
+/* === Background Animation === */
 .register-container {
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
-  /* Animated pastel gradient background (same as html, body) */
-  background: linear-gradient(135deg, var(--mint-green), var(--soft-pink), #ffdcf5, #f2f4c3);
+  background: linear-gradient(135deg, var(--soft-pink), var(--creamy-white), #ffe0ef, #ffffff);
   background-size: 400% 400%;
   animation: gradientShift 12s ease infinite;
-
-  font-family: 'Quicksand', sans-serif;
+  font-family: 'Poppins', sans-serif;
+  position: relative;
+  z-index: 1;
 }
 
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* ✨ Sparkle effect */
+.register-container::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.25) 1px, transparent 1px);
+  background-size: 18px 18px;
+  opacity: 0.15;
+  animation: shimmer 8s linear infinite;
+  pointer-events: none;
+  z-index: 0;
+}
+
+@keyframes shimmer {
+  from { background-position: 0 0; }
+  to { background-position: 100% 100%; }
+}
+
+/* 🎀 Register Form */
 .register-form {
-  background-color: var(--creamy-white);
-  padding: 3rem 2rem;
+  background-color: rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(18px);
+  padding: 2.5rem 2rem;
   border-radius: 1.5rem;
-  box-shadow: 0 4px 12px rgba(246, 166, 178, 0.3);
-  width: 350px;
+  box-shadow: 0 10px 30px rgba(255, 182, 193, 0.35);
+  width: 360px;
   text-align: center;
-  color: var(--text-highlight);
+  color: var(--text-dark);
+  position: relative;
+  z-index: 2;
+  transition: transform 0.3s ease;
 }
 
+.register-form:hover {
+  transform: scale(1.01);
+}
+
+/* 🧁 Heading */
 .register-form h2 {
   font-size: 2rem;
-  color: var(--peachy-coral);
+  color: var(--rose-pink);
   margin-bottom: 1.5rem;
-  font-family: 'Pacifico', cursive;
+  
   text-shadow: 1px 1px var(--soft-pink);
 }
 
+/* 💗 Inputs & Select */
 .register-form form input,
 .register-form form select {
   width: 100%;
-  padding: 10px;
+  padding: 0.75rem;
   margin-bottom: 1rem;
-  border: 1px solid var(--blush-pink);
+  border: 2px solid var(--blush-pink);
   border-radius: 10px;
-  outline: none;
   font-size: 1rem;
-  font-family: 'Quicksand', sans-serif;
+  font-family: 'Poppins', sans-serif;
   color: var(--text-dark);
-  transition: border-color 0.3s ease;
+  background-color: #ffffffdd;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .register-form form input:focus,
 .register-form form select:focus {
-  border-color: var(--peachy-coral);
-  box-shadow: 0 0 8px var(--peachy-coral);
+  border-color: var(--rose-pink);
+  box-shadow: 0 0 10px rgba(255, 105, 180, 0.4);
+  outline: none;
 }
 
+/* 🍬 Button */
 .register-form button {
   width: 100%;
-  padding: 10px;
+  padding: 0.8rem;
   background-color: var(--blush-pink);
-  color: white;
+  color: var(--text-dark);
+  font-weight: bold;
   border: none;
-  border-radius: 10px;
-  cursor: pointer;
+  border-radius: 12px;
   font-size: 1.1rem;
-  font-family: 'Quicksand', sans-serif;
+  font-family: 'Poppins', sans-serif;
   box-shadow: 0 4px 10px rgba(246, 166, 178, 0.4);
-  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  transition: background-color 0.3s ease, transform 0.2s;
+  cursor: pointer;
 }
 
 .register-form button:hover {
-  background-color: var(--peachy-coral);
-  box-shadow: 0 6px 15px rgba(255, 111, 97, 0.6);
+  background-color: var(--rose-pink);
+  color: white;
+  transform: scale(1.03);
 }
 
+.register-form button:disabled {
+  background-color: #f5d4de;
+  cursor: not-allowed;
+}
+
+/* 🔗 Login Link */
 .login-link {
   margin-top: 1rem;
-  font-size: 1rem;
-  color: var(--blush-pink);
-  font-family: 'Quicksand', sans-serif;
+  font-size: 0.95rem;
+  color: var(--text-dark);
 }
 
 .login-link-text {
-  color: var(--text-highlight);
+  color: var(--rose-pink);
   font-weight: bold;
   text-decoration: none;
   transition: color 0.3s ease;
 }
 
 .login-link-text:hover {
-  color: var(--peachy-coral);
+  color: var(--text-dark);
   text-decoration: underline;
 }
 
+/* ⚠️ Error Message */
 .error {
-  color: #ff4d4f; /* This red is fine for error */
+  color: #ff4d4f;
   margin-bottom: 1rem;
-  font-family: 'Quicksand', sans-serif;
+  font-weight: bold;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* 📱 Responsive */
+@media screen and (max-width: 480px) {
+  .register-form {
+    width: 100%;
+    padding: 1.5rem;
+  }
+
+  .register-form h2 {
+    font-size: 1.6rem;
+  }
+
+  .register-form button {
+    font-size: 1rem;
+  }
 }

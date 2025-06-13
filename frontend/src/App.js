@@ -8,6 +8,7 @@ import ManageProducts from './components/ManageProducts';
 import ManageUsers from './components/ManageUsers';
 import CustomerDashboard from './components/CustomerDashboard';
 import ProductsPage from './components/ProductsPage';
+import FavoritesPage from './components/FavoritesPage';
 import CartPage from "./components/CartPage";
 import MyOrdersPage from './components/MyOrdersPage';
 import Home from './components/pages/Home';
@@ -49,6 +50,7 @@ function App() {
         <Route path="/customerDashboard" element={<CustomerDashboard />} />
         <Route path="/shop" element={<ProductsPage />} />
         <Route path="/cart" element={<CartPage />} />
+        <Route path="/favorites" element={<FavoritesPage />} />
         <Route path="/orders" element={<MyOrdersPage />} />
         {/* Redirect unknown paths to welcome */}
         <Route path="*" element={<Navigate to="/" />} />

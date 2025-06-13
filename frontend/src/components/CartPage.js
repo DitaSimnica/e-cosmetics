@@ -4,14 +4,15 @@ import "./CartPage.css";
 import { toast } from "react-toastify";
 
 const CartPage = () => {
-  const [cart, setCart] = useState(null);
+  // Initialize with empty products and 0 totalAmount to avoid null errors
+  const [cart, setCart] = useState({ products: [], totalAmount: 0 });
   const [loading, setLoading] = useState(true);
 
   const fetchCart = async () => {
     setLoading(true);
     try {
       const res = await axios.get("/cart");
-      setCart(res.data);
+      setCart(res.data || { products: [], totalAmount: 0 }); // fallback
     } catch (err) {
       toast.error("Failed to fetch cart.");
     } finally {
@@ -49,7 +50,7 @@ const CartPage = () => {
     <div className="cart-page">
       <h1 className="cart-header">🛍️ Your Beauty Cart</h1>
 
-      {cart?.products.length === 0 ? (
+      {cart.products.length === 0 ? (
         <div className="empty-cart-message">
           <p>🛒 Your cart is empty</p>
           <p>Add some glow ✨</p>

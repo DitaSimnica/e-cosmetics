@@ -37,8 +37,8 @@
 
 .badge-cute {
   display: inline-block;
-  background-color: var(--pink-strong); /* #ffdcf5 */
-  color: var(--pink-dark); /* #9c136f */
+  background-color: var(--pink-shadow-hover); /* #ffdcf5 */
+  color: var(--pink-gradient1); /* #9c136f */
   padding: 5px 10px;
   font-size: 0.9rem;
   border-radius: 12px;

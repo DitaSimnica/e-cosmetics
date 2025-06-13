@@ -13,15 +13,15 @@ const ManageProducts = () => {
     price: '',
     imageUrl: ''
   });
-
   const [editMode, setEditMode] = useState(null);
   const [editProduct, setEditProduct] = useState({});
 
+  // Fetch products from API
   const fetchProducts = async () => {
     const token = localStorage.getItem('authToken');
     try {
       const response = await api.get('/product', {
-        headers: { Authorization: `Bearer ${token}` },
+        headers: { Authorization: `Bearer ${token}` }
       });
       setProducts(response.data);
     } catch (error) {
@@ -33,11 +33,12 @@ const ManageProducts = () => {
     fetchProducts();
   }, []);
 
+  // Delete a product
   const handleDelete = async (id) => {
     const token = localStorage.getItem('authToken');
     try {
       await api.delete(`/product/${id}`, {
-        headers: { Authorization: `Bearer ${token}` },
+        headers: { Authorization: `Bearer ${token}` }
       });
       fetchProducts();
       toast.success('🗑️ Product deleted successfully!');
@@ -46,12 +47,13 @@ const ManageProducts = () => {
     }
   };
 
+  // Add a new product
   const handleAddProduct = async (e) => {
     e.preventDefault();
     const token = localStorage.getItem('authToken');
     try {
       await api.post('/product', newProduct, {
-        headers: { Authorization: `Bearer ${token}` },
+        headers: { Authorization: `Bearer ${token}` }
       });
       setShowForm(false);
       setNewProduct({ name: '', description: '', price: '', imageUrl: '' });
@@ -62,21 +64,24 @@ const ManageProducts = () => {
     }
   };
 
+  // Start editing a product
   const handleEditClick = (product) => {
     setEditMode(product.id);
     setEditProduct(product);
   };
 
+  // Handle changes in edit inputs
   const handleEditChange = (e) => {
     setEditProduct({ ...editProduct, [e.target.name]: e.target.value });
   };
 
+  // Update product
   const handleUpdateProduct = async (e) => {
     e.preventDefault();
     const token = localStorage.getItem('authToken');
     try {
       await api.put(`/product/${editMode}`, editProduct, {
-        headers: { Authorization: `Bearer ${token}` },
+        headers: { Authorization: `Bearer ${token}` }
       });
       setEditMode(null);
       setEditProduct({});
@@ -91,7 +96,11 @@ const ManageProducts = () => {
     <div className="product-page-cute p-4">
       <ToastContainer position="top-center" autoClose={2000} />
       <h2 className="mb-4">🎀 Manage Products</h2>
-      <button className="btn btn-pink mb-3" onClick={() => setShowForm(!showForm)}>
+
+      <button
+        className="btn btn-pink mb-3"
+        onClick={() => setShowForm(!showForm)}
+      >
         {showForm ? 'Cancel' : '➕ Add New Product'}
       </button>
 
@@ -102,34 +111,48 @@ const ManageProducts = () => {
             type="text"
             placeholder="Product Name"
             value={newProduct.name}
-            onChange={(e) => setNewProduct({ ...newProduct, name: e.target.value })}
+            onChange={(e) =>
+              setNewProduct({ ...newProduct, name: e.target.value })
+            }
             required
           />
+
           <textarea
             className="form-control mb-2"
             placeholder="Description"
             rows="3"
             value={newProduct.description}
-            onChange={(e) => setNewProduct({ ...newProduct, description: e.target.value })}
+            onChange={(e) =>
+              setNewProduct({ ...newProduct, description: e.target.value })
+            }
             required
           />
+
           <input
             className="form-control mb-2"
             type="number"
             step="0.01"
             placeholder="Price"
             value={newProduct.price}
-            onChange={(e) => setNewProduct({ ...newProduct, price: e.target.value })}
+            onChange={(e) =>
+              setNewProduct({ ...newProduct, price: e.target.value })
+            }
             required
           />
+
           <input
             className="form-control mb-3"
             type="text"
             placeholder="Image URL"
             value={newProduct.imageUrl}
-            onChange={(e) => setNewProduct({ ...newProduct, imageUrl: e.target.value })}
+            onChange={(e) =>
+              setNewProduct({ ...newProduct, imageUrl: e.target.value })
+            }
           />
-          <button type="submit" className="btn btn-success">💾 Save Product</button>
+
+          <button type="submit" className="btn btn-success">
+            💾 Save Product
+          </button>
         </form>
       )}
 
@@ -149,6 +172,7 @@ const ManageProducts = () => {
                   onChange={handleEditChange}
                   required
                 />
+
                 <textarea
                   className="form-control mb-1"
                   name="description"
@@ -157,6 +181,7 @@ const ManageProducts = () => {
                   onChange={handleEditChange}
                   required
                 />
+
                 <input
                   className="form-control mb-1"
                   type="number"
@@ -166,6 +191,7 @@ const ManageProducts = () => {
                   onChange={handleEditChange}
                   required
                 />
+
                 <input
                   className="form-control mb-2"
                   type="text"
@@ -173,8 +199,19 @@ const ManageProducts = () => {
                   value={editProduct.imageUrl}
                   onChange={handleEditChange}
                 />
-                <button type="submit" className="btn btn-success btn-sm me-2">💾 Save</button>
-                <button type="button" className="btn btn-secondary btn-sm" onClick={() => setEditMode(null)}>
+
+                <button
+                  type="submit"
+                  className="btn btn-success btn-sm me-2"
+                >
+                  💾 Save
+                </button>
+
+                <button
+                  type="button"
+                  className="btn btn-secondary btn-sm"
+                  onClick={() => setEditMode(null)}
+                >
                   ❌ Cancel
                 </button>
               </form>
@@ -182,15 +219,16 @@ const ManageProducts = () => {
               <>
                 <div>
                   <strong>{product.name}</strong> - ${product.price}
-                  <p className="mb-1 text-muted">{product.description}</p>
+                  <p className="description-text mb-1">{product.description}</p>
                   {product.imageUrl && (
                     <img
                       src={product.imageUrl}
                       alt={product.name}
-                      style={{ width: '60px', height: '60px', borderRadius: '10px' }}
+                      className="product-image"
                     />
                   )}
                 </div>
+
                 <div>
                   <button
                     className="btn btn-warning btn-sm me-2"
@@ -198,6 +236,7 @@ const ManageProducts = () => {
                   >
                     ✏️ Edit
                   </button>
+
                   <button
                     className="btn btn-danger btn-sm"
                     onClick={() => handleDelete(product.id)}

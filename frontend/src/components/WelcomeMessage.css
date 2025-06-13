@@ -1,26 +1,22 @@
-@import url('https://fonts.googleapis.com/css2?family=Pacifico&family=Quicksand:wght@400;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@400;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Parisienne&family=Poppins:wght@400;600&display=swap');
 
 /* === Color Palette Variables === */
 :root {
-  /* Cute & Girly Palette */
-  --soft-pink: #FADADD;
-  --blush-pink: #F6A6B2;
-  --peachy-coral: #FF6F61;
-  --mint-green: #C6E7D9;
-  --creamy-white: #FFF8F0;
-  --warm-gray: #B8A9A6;
-
-  /* Text colors */
-  --text-dark: #333333;
-  --text-muted: #84406a;
-  --text-highlight: #a8325a;
+  --soft-pink: #ffe6f0;
+  --blush-pink: #ffb6c1;
+  --rose-pink: #ff69b4;
+  --creamy-white: #fffafa;
+  --text-dark: #4b2c39;
+  --text-muted: #b06789;
+  --text-highlight: #e75480;
 }
 
 /* === Body & Background with Animated Gradient & Sparkle Overlay === */
 body {
   margin: 0;
-  font-family: 'Quicksand', sans-serif;
-  background: linear-gradient(135deg, var(--mint-green), var(--soft-pink), #ffdcf5, #f2f4c3);
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(135deg, var(--soft-pink), var(--creamy-white), #ffe0ef, #ffffff);
   background-size: 400% 400%;
   animation: gradientShift 12s ease infinite;
   height: 100vh;
@@ -45,7 +41,7 @@ body::after {
   height: 100%;
   background-image: radial-gradient(rgba(255, 255, 255, 0.25) 1px, transparent 1px);
   background-size: 18px 18px;
-  opacity: 0.2;
+  opacity: 0.15;
   animation: shimmer 8s linear infinite;
   pointer-events: none;
   z-index: 1;
@@ -67,13 +63,13 @@ body::after {
   justify-content: center;
   align-items: center;
   height: 100vh;
-  color: #57375D;
+  color: var(--text-dark);
   text-shadow: 1px 1px 3px rgba(255, 255, 255, 0.4);
-  box-shadow: 0 0 40px rgba(255, 220, 245, 0.3);
+  box-shadow: 0 0 60px rgba(255, 182, 193, 0.4);
   border-radius: 25px;
   padding: 2.5rem;
-  background: rgba(255, 255, 255, 0.2);
-  backdrop-filter: blur(12px);
+  background: rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(14px);
   transition: opacity 0.5s ease;
   z-index: 2;
   animation: popIn 1.4s ease-out;
@@ -92,20 +88,21 @@ body::after {
 }
 
 .welcome-message h1 {
-  font-size: 3rem;
+  font-size: 2.8rem;
   margin-bottom: 1rem;
-  color: #d84cc4;
+  color: var(--rose-pink);
 }
 
 .welcome-message .brand {
-  color: #ff66cc;
-  font-family: 'Pacifico', cursive;
-  font-weight: bold;
+  color: var(--rose-pink);
+  
+  font-size: 3.5rem;
 }
 
 .welcome-message p {
-  font-size: 1.5rem;
-  color: #6a5d7b;
+  font-size: 1.4rem;
+  color: var(--text-muted);
+  margin-top: 0.5rem;
 }
 
 /* Floating icons */
@@ -117,9 +114,9 @@ body::after {
 
 .icon {
   font-size: 2.4rem;
-  color: #ffb3f0;
+  color: var(--blush-pink);
   animation: float 2.5s infinite ease-in-out;
-  filter: drop-shadow(0 0 4px #ffd6fa);
+  filter: drop-shadow(0 0 4px #ffc9e6);
 }
 
 .icon:nth-child(2) {
@@ -139,9 +136,7 @@ body::after {
   }
 }
 
-/* === Additional Cute & Girly Themed Styles You Might Use === */
-
-/* Example button style */
+/* === Button Example === */
 .btn {
   background-color: var(--blush-pink);
   color: white;
@@ -150,21 +145,25 @@ body::after {
   font-size: 1rem;
   border-radius: 25px;
   cursor: pointer;
-  box-shadow: 0 4px 10px rgba(246, 166, 178, 0.4);
+  box-shadow: 0 4px 10px rgba(255, 182, 193, 0.4);
   transition: background-color 0.3s ease;
 }
 
 .btn:hover {
-  background-color: var(--peachy-coral);
+  background-color: var(--rose-pink);
 }
 
-/* Responsive tweaks */
+/* === Responsive Adjustments === */
 @media (max-width: 768px) {
   .welcome-message h1 {
     font-size: 2.2rem;
   }
 
+  .welcome-message .brand {
+    font-size: 2.8rem;
+  }
+
   .welcome-message p {
-    font-size: 1.2rem;
+    font-size: 1.1rem;
   }
 }
